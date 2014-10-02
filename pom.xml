@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cn.fh</groupId>
-	<artifactId>lighting</artifactId>
+	<artifactId>lightning</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
 	<description>致力于打造超轻量级的Java Web开发框架</description>
