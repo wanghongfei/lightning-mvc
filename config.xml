@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<lightning-config>
+    <bean id="apple" class="cn.fh.lightning.bean.test.Apple" />
+
+    <bean id="orange" class="cn.fh.lightning.bean.test.Orange" >
+        <prop name="apple" ref-class="apple" />
+    </bean>
+</lightning-config>

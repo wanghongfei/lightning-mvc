@@ -73,12 +73,12 @@ public abstract class AbstractBean implements Bean {
 			return false;
 		}
 
-		return this.beanName.equals(other);
+		return this.beanName.equals(other.beanName);
 	}
 
 	@Override
 	public String toString() {
-		return "Bean Name:" + this.actuallBean + ", Class:" + getClass().getName();
+		return "Bean Name:" + this.beanName + ", Class:" + getClass().getName();
 	}
 	
 	

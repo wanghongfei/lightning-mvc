@@ -54,7 +54,7 @@ public class BasicInjectableContainerTest {
 		BasicInjectableBeanContainer con = new BasicInjectableBeanContainer();
 
 		Map<String, String> propMap = new HashMap<String, String>();
-		propMap.put("orange", "orange");
+		propMap.put("orange1", "orange");
 		
 		
 
@@ -67,7 +67,7 @@ public class BasicInjectableContainerTest {
 		Apple apple = (Apple) con.getBeanWithDependencies("apple");
 		assertNotNull("没有得到bean", apple);
 		assertEquals("bean错误", "apple", apple.toString());
-		assertNotNull("orange没有注入", apple.getOrange1());
+		assertNotNull("orange1没有注入", apple.getOrange1());
 	}
 
 	@Test
