@@ -89,6 +89,6 @@ public class BasicInjectableContainerTest {
 	public void nameTest() {
 		String appleName = Apple.class.getCanonicalName();
 
-		assertEquals("类全名错误", "cn.fh.lighting.bean.test.Apple", appleName);
+		assertEquals("类全名错误", "cn.fh.lightning.bean.test.Apple", appleName);
 	}
 }

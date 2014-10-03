@@ -53,12 +53,13 @@ public class XmlReader extends AbstractReader {
 
 	@Override
 	protected List<Bean> doLoadBeans() {
+		// 用List存放通过解析XML文件而生成的Bean
 		List<Bean> beanList = new ArrayList<Bean>();
 		
 		// 遍历每一个Resource, 依次解析
 		for (Resource r : this.resources) {
 			try {
-				Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(r.getInputStream());
+				Document doc = getDocumentObject(r);
 				
 				// 根标签
 				Element root = doc.getDocumentElement();
@@ -67,55 +68,19 @@ public class XmlReader extends AbstractReader {
 					throw new InvalidBeanXmlConfigurationException(r + ":根标签应为<lightning-config>");
 				}
 				
-				// 每个循环都是一个bean定义标签
+				// 得到根结点的子节点
 				NodeList childList = root.getChildNodes();
 				int len = childList.getLength();
+				
+				// 每个循环都是一个bean定义标签
 				for (int ix = 0 ; ix < len ; ++ix) {
 					Node item = childList.item(ix);
 					if (item instanceof Element) {
 						Element beanTag = (Element)item;
 						
-						// 解析bean的id
-						if (false == beanTag.hasAttribute("id") || false == beanTag.hasAttribute("class")) {
-							throw new InvalidBeanXmlConfigurationException(r + ":缺少id或class属性");
-						}
-
-						String id = beanTag.getAttribute("id");
-						String className = beanTag.getAttribute("class");
-						if (true == id.isEmpty() || true == className.isEmpty()) {
-							throw new InvalidBeanXmlConfigurationException(r + ":id或class属性不能为空");
-						}
+						// 解析<bean>标签
+						parseBeanTag(beanTag, r, beanList);
 						
-						// 解析bean的依赖
-						Map<String, String> depMap = new HashMap<String, String>();
-						if (true == beanTag.hasChildNodes()) {
-							NodeList depList = beanTag.getChildNodes();
-							int LEN = depList.getLength();
-							
-							// 每一个循环都是一个表达依赖的标签
-							for (int i = 0 ; i < LEN ; ++i ) {
-								Node depItem = depList.item(i);
-								if (depItem instanceof Element) {
-									Element depTag = (Element)depItem;
-									
-									if (false == depTag.getTagName().equals("prop")) {
-										throw new InvalidBeanXmlConfigurationException(r + ":<bean>标签内只能有<prop>标签");
-									}
-									
-									String propName = depTag.getAttribute("name");
-									String propClass = depTag.getAttribute("ref-class");
-									
-									depMap.put(propName, propClass);
-								}
-							} // for-loop ends
-							
-							Bean bean = BeanUtil.createSingletonBean(id, className, depMap);
-							beanList.add(bean);
-							
-						} else { // 没有依赖，直接创建并注册bean
-							Bean bean = BeanUtil.createSingletonBean(id, className);
-							beanList.add(bean);
-						}
 
 					}/* else {
 						throw new InvalidBeanXmlConfigurationException(r + ":标签非法");
@@ -133,5 +98,74 @@ public class XmlReader extends AbstractReader {
 		}
 		return beanList;
 	}
+	
+	/**
+	 * 解析一个<bean>标签
+	 * @param beanTag
+	 * @param r
+	 * @param beanList
+	 */
+	private void parseBeanTag(Element beanTag, Resource r, List<Bean> beanList) {
+		// 解析bean的id和类名
+		if (false == beanTag.hasAttribute("id") || false == beanTag.hasAttribute("class")) {
+			throw new InvalidBeanXmlConfigurationException(r + ":缺少id或class属性");
+		}
+
+		String id = beanTag.getAttribute("id");
+		String className = beanTag.getAttribute("class");
+		if (true == id.isEmpty() || true == className.isEmpty()) {
+			throw new InvalidBeanXmlConfigurationException(r + ":id或class属性不能为空");
+		}
+		
+		// 解析bean的依赖
+		// 将所有依赖都放到depMap中
+		Map<String, String> depMap = new HashMap<String, String>();
+		if (true == beanTag.hasChildNodes()) {
+			NodeList depList = beanTag.getChildNodes();
+			int LEN = depList.getLength();
+			
+			// 每一个循环都是一个表达依赖的标签
+			for (int i = 0 ; i < LEN ; ++i ) {
+				Node depItem = depList.item(i);
+				if (depItem instanceof Element) {
+					Element depTag = (Element)depItem;
+					
+					// 解析<prop>标签
+					parseBeanDepTag(depTag, r, depMap);
+
+				}
+			} // for-loop ends
+			
+			// 创建有依赖的Bean
+			Bean bean = BeanUtil.createSingletonBean(id, className, depMap);
+			beanList.add(bean);
+			
+		} else { // 没有依赖，直接创建并注册bean
+			Bean bean = BeanUtil.createSingletonBean(id, className);
+			beanList.add(bean);
+		}
+	}
+	
+	/**
+	 * 解析一个<prop>标签
+	 * @param depTag
+	 * @param r
+	 * @param depMap
+	 */
+	private void parseBeanDepTag(Element depTag, Resource r, Map<String, String> depMap) {
+		if (false == depTag.getTagName().equals("prop")) {
+			throw new InvalidBeanXmlConfigurationException(r + ":<bean>标签内只能有<prop>标签");
+		}
+		
+		String propName = depTag.getAttribute("name");
+		String propClass = depTag.getAttribute("ref-class");
+		
+		depMap.put(propName, propClass);
+	}
+	
+	private Document getDocumentObject(Resource r) throws SAXException,  IOException, ParserConfigurationException {
+		return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(r.getInputStream());
+	}
+	
 
 }
