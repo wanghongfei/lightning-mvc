@@ -88,10 +88,10 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 					logger.debug("[" + bean.getBeanName() + "]查找依赖:" + entry.getKey());
 				}
 
-				Object depObject = getBeanWithDependencies(entry.getKey());
+				Object depObject = getBeanWithDependencies(entry.getValue());
 
 				if (null == depObject) {
-					throw new BeanNotFoundException("容器中没有找到[" + entry.getKey() + "]");
+					throw new BeanNotFoundException("容器中没有找到[" + entry.getValue() + "]");
 				}
 				
 				injectField(actObject, fields, entry.getKey(), depObject);
@@ -114,6 +114,7 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 	protected boolean injectField(Object objToInject, Field[] allFields, String fieldName, Object fieldValue) {
 		for (int ix = 0 ; ix < allFields.length ; ++ix) {
 			if (allFields[ix].getName().equals(fieldName)) {
+				allFields[ix].setAccessible(true);
 
 				try {
 					allFields[ix].set(objToInject, fieldValue);

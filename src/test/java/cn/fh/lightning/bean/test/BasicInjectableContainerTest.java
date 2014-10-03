@@ -13,6 +13,27 @@ import cn.fh.lightning.bean.SingletonBean;
 
 public class BasicInjectableContainerTest {
 	@Test
+	public void multiplyInjectTest() throws Exception {
+		BasicInjectableBeanContainer con = new BasicInjectableBeanContainer();
+		
+		Map<String, String> propMap = new HashMap<String, String>();
+		propMap.put("orange1", "orange");
+		propMap.put("orange2", "orange");
+		
+
+		Bean bean1 = new SingletonBean("apple", Apple.class.newInstance(), propMap);
+		Bean bean2 = new SingletonBean("orange", Orange.class.newInstance());
+		con.registerBean(bean1);
+		con.registerBean(bean2);
+		
+
+		Apple apple = (Apple) con.getBeanWithDependencies("apple");
+		assertNotNull("没有得到bean", apple);
+		assertEquals("bean错误", "apple", apple.toString());
+		assertNotNull("orange1没有注入", apple.getOrange1());
+		assertNotNull("orange2没有注入", apple.getOrange2());
+	}
+	@Test
 	public void containerTest() throws Exception {
 		BasicInjectableBeanContainer con = new BasicInjectableBeanContainer();
 
@@ -46,7 +67,7 @@ public class BasicInjectableContainerTest {
 		Apple apple = (Apple) con.getBeanWithDependencies("apple");
 		assertNotNull("没有得到bean", apple);
 		assertEquals("bean错误", "apple", apple.toString());
-		assertNotNull("orange没有注入", apple.getOrange());
+		assertNotNull("orange没有注入", apple.getOrange1());
 	}
 
 	@Test
