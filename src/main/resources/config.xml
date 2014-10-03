@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<lightning-config>
+    <map url="/test" controller="cn.fh.lightning.bean.test.Apple" request-type="GET" />
+</lightning-config>

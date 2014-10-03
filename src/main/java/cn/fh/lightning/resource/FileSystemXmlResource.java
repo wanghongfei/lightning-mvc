@@ -10,14 +10,14 @@ import java.io.InputStream;
  * @author whf
  *
  */
-public class XmlResource implements Resource {
+public class FileSystemXmlResource implements Resource {
 	private String path;
 
 	/**
 	 * 使用xml文件路径构造XmlResource对象
 	 * @param path
 	 */
-	public XmlResource(String path) {
+	public FileSystemXmlResource(String path) {
 		this.path = path;
 	}
 

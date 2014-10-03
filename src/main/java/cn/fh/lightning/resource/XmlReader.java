@@ -25,6 +25,10 @@ import cn.fh.lightning.exception.InvalidBeanXmlConfigurationException;
 public class XmlReader extends AbstractReader {
 	public static Logger logger = LoggerFactory.getLogger(XmlReader.class);
 	
+	public XmlReader() {
+		
+	}
+	
 	/**
 	 * 构造一个XmlReader对象，并指定配置文件的路径
 	 * @param xmlPaths
@@ -39,7 +43,7 @@ public class XmlReader extends AbstractReader {
 				path = "/" + path.substring(0);
 			}*/
 			
-			this.resources[ix++] = new XmlResource(path);
+			this.resources[ix++] = new FileSystemXmlResource(path);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("xml资源:" + path);
@@ -105,7 +109,7 @@ public class XmlReader extends AbstractReader {
 	 * @param r
 	 * @param beanList
 	 */
-	private void parseBeanTag(Element beanTag, Resource r, List<Bean> beanList) {
+	protected void parseBeanTag(Element beanTag, Resource r, List<Bean> beanList) {
 		// 解析bean的id和类名
 		if (false == beanTag.hasAttribute("id") || false == beanTag.hasAttribute("class")) {
 			throw new InvalidBeanXmlConfigurationException(r + ":缺少id或class属性");
