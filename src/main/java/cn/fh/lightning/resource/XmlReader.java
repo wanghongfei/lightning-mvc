@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -25,15 +26,17 @@ import cn.fh.lightning.exception.InvalidBeanXmlConfigurationException;
 public class XmlReader extends AbstractReader {
 	public static Logger logger = LoggerFactory.getLogger(XmlReader.class);
 	
+	
 	public XmlReader() {
 		
 	}
+	
 	
 	/**
 	 * 构造一个XmlReader对象，并指定配置文件的路径
 	 * @param xmlPaths
 	 */
-	public XmlReader(String... xmlPaths) {
+	public XmlReader(ServletContext ctx, String... xmlPaths) {
 		this.resources = new Resource[xmlPaths.length];
 
 		int ix = 0;
@@ -43,7 +46,11 @@ public class XmlReader extends AbstractReader {
 				path = "/" + path.substring(0);
 			}*/
 			
-			this.resources[ix++] = new FileSystemXmlResource(path);
+			if (null == ctx) {
+				this.resources[ix++] = new FileSystemXmlResource(path);
+			} else {
+				this.resources[ix++] = new ClassPathXmlResource(path, ctx);
+			}
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("xml资源:" + path);

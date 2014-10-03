@@ -3,6 +3,7 @@ package cn.fh.lightning.mvc.servlet;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ import cn.fh.lightning.mvc.Controller;
 import cn.fh.lightning.mvc.InternalModel;
 import cn.fh.lightning.mvc.RequestMap;
 import cn.fh.lightning.mvc.RequestType;
+import cn.fh.lightning.mvc.UrlRequestMap;
 import cn.fh.lightning.mvc.exception.InvalidControllerException;
 import cn.fh.lightning.mvc.exception.ViewNotFoundException;
 import cn.fh.lightning.resource.Reader;
@@ -36,8 +38,8 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	/**
 	 * 默认的bean文件路径
 	 */
-	public static String DEFAULT_CONFIGURE_FILE_LOCATION = "/WEB-INF/lighting-config.xml";
-	public static String DEFAULT_WEB_CONFIGURE_FILE_LOCATION = "/WEB-INF/lighting-url-map.xml";
+	public static String DEFAULT_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-config.xml";
+	public static String DEFAULT_WEB_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-url-map.xml";
 	
 	
 	private RequestMap[] reqMaps;
@@ -55,21 +57,21 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		// 得到bean文件路径
-		String configFile = getServletConfig().getServletContext().getInitParameter(CONFIGURE_FILE_ATTRIBUTE);
+		String configFile = event.getServletContext().getInitParameter(CONFIGURE_FILE_ATTRIBUTE);
 		if (null == configFile) {
 			configFile = DEFAULT_CONFIGURE_FILE_LOCATION;
 		}
 		
 		// 解析bean文件
 		logger.info("正在解析bean配置文件");
-		Reader reader = new XmlReader(configFile);
+		Reader reader = new XmlReader(event.getServletContext(), configFile);
 		// 创建IoC容器
 		logger.info("正在启动IoC容器");
 		InjectableBeanContainer ioc = new BasicInjectableBeanContainer();
 		// 注册bean
 		ioc.registerBeans(reader.loadBeans());
 		// 将容器放到Servet上下文中
-		getServletConfig().getServletContext().setAttribute(BEAN_CONTAINER_ATTRIBUTE, ioc);
+		event.getServletContext().setAttribute(BEAN_CONTAINER_ATTRIBUTE, ioc);
 
 		logger.info("容器启动完毕");
 	}
@@ -85,12 +87,18 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		// 得到请求类型
 		RequestType reqType = RequestType.valueOf(req.getMethod());
 		
+		String uri = req.getRequestURI().substring(1);
+		int index = uri.indexOf('/');
+		String trimmed = uri.substring(index);
+		System.out.println("收到请求[" + trimmed + "]");
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("收到请求[" + req.getRequestURI() + "]");
 		}
 		
 		// 得到控制器
-		RequestMap rMap = findController(req.getRequestURI(), reqType);
+		//RequestMap rMap = findController(req.getRequestURI(), reqType);
+		RequestMap rMap = findController(trimmed, reqType);
 		if (null == rMap) {
 			logger.info("没有与[" + req.getRequestURI() + "]对应的控制器!");
 			return;
@@ -98,18 +106,18 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		
 		// 从容器中取出controller
 		String controllerName = rMap.getControllerName();
-		Bean bean =(Bean) getContainer().getBeanWithDependencies(controllerName);
+		Object bean = getContainer(req).getBeanWithDependencies(controllerName);
 		if (null == bean) {
 			throw new BeanNotFoundException("没有找到[" + controllerName + "]");
 		}
-		Object cl = bean.getActuallBean();
-		if (false == cl instanceof Controller) {
+		//Object cl = bean.getActuallBean();
+		if (false == bean instanceof Controller) {
 			throw new InvalidControllerException("Controller[" + controllerName + "]非法:没有实现Controller接口");
 		}
 
 		// 调用业务逻辑方法
 		InternalModel model = new BasicModel();
-		Controller controller = (Controller)cl;
+		Controller controller = (Controller)bean;
 		String viewName = controller.handle(req, model);
 
 		
@@ -126,7 +134,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 			throw new ViewNotFoundException("视图名不能为空!");
 		}
 		try {
-			getServletContext().getRequestDispatcher("/WEB-INF/views/" + viewName).forward(req, resp);
+			req.getServletContext().getRequestDispatcher("/WEB-INF/views/" + viewName).forward(req, resp);
 		} catch (ServletException | IOException e) {
 			throw new ViewNotFoundException("找不到[" + viewName + "]");
 		}
@@ -153,19 +161,19 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	 * 初始化Servlet.该方法会被父类的init()方法调用
 	 */
 	@Override
-	protected void initServlet() {
-		initRequestMap();
+	protected void initServlet(ServletContext ctx) {
+		initRequestMap(ctx);
 		logger.info("加载url映射完毕");
 	}
 	
-	private void initRequestMap() {
-		Reader reader = new WebXmlReader(DEFAULT_WEB_CONFIGURE_FILE_LOCATION);
-		this.reqMaps = (RequestMap[]) reader.loadBeans().toArray();
+	private void initRequestMap(ServletContext ctx) {
+		Reader reader = new WebXmlReader(ctx, DEFAULT_WEB_CONFIGURE_FILE_LOCATION);
+		this.reqMaps = reader.loadBeans().toArray(new UrlRequestMap[1]);
 		//getContainer().registerBeans(reader.loadBeans());
 	}
 	
-	private InjectableBeanContainer getContainer() {
-		return (InjectableBeanContainer) getServletConfig().getServletContext().getAttribute(BEAN_CONTAINER_ATTRIBUTE);
+	private InjectableBeanContainer getContainer(HttpServletRequest req) {
+		return (InjectableBeanContainer)req.getServletContext().getAttribute(BEAN_CONTAINER_ATTRIBUTE);
 	}
 
 }

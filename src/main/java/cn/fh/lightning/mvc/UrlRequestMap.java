@@ -12,6 +12,10 @@ public class UrlRequestMap implements RequestMap {
 	private String controllerName;
 	private RequestType requestType;
 	
+	public UrlRequestMap() {
+		
+	}
+	
 	public UrlRequestMap(String url, String controllerName, RequestType type) {
 		this.url = url;
 		this.controllerName = controllerName;

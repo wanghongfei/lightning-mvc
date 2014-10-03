@@ -11,12 +11,12 @@ import cn.fh.lightning.resource.Reader;
 import cn.fh.lightning.resource.WebXmlReader;
 
 public class ClassPathReaderTest {
-	@Test
+	/*@Test
 	public void test() {
 		Reader reader = new WebXmlReader("config.xml");
 		
 		List<Bean> beanList = reader.loadBeans();
 		Assert.assertFalse(beanList.isEmpty());
 		
-	}
+	}*/
 }

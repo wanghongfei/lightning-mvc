@@ -14,7 +14,7 @@ public class XmlReaderTest {
 
 	@Test
 	public void xmlTest() {
-		Reader reader = new XmlReader("config.xml");
+		Reader reader = new XmlReader(null, "config.xml");
 		
 		List<Bean> beanList = reader.loadBeans();
 		Assert.assertFalse(beanList.isEmpty());
@@ -25,7 +25,7 @@ public class XmlReaderTest {
 	
 	@Test
 	public void refTest() {
-		Reader reader = new XmlReader("config.xml");
+		Reader reader = new XmlReader(null, "config.xml");
 		
 		List<Bean> beanList = reader.loadBeans();
 		

@@ -3,6 +3,7 @@ package cn.fh.lightning.mvc.servlet;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public abstract class BasicServlet extends HttpServlet {
 		logger.info("正在初始化[" + getClass().getName() + "]");
 
 		// 由子类实现该方法
-		initServlet();
+		initServlet(config.getServletContext());
 
 		logger.info("[" + getClass().getName() + "]初始化完成");
 	}
@@ -43,7 +44,7 @@ public abstract class BasicServlet extends HttpServlet {
 	}
 
 
-	protected abstract void initServlet();
+	protected abstract void initServlet(ServletContext ctx);
 	
 
 }

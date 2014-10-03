@@ -19,7 +19,7 @@ public class BasicInjectableContainerTest {
 	public void injectByXmlTest() throws Exception {
 		BasicInjectableBeanContainer con = new BasicInjectableBeanContainer();
 		
-		Reader reader = new XmlReader("config.xml");
+		Reader reader = new XmlReader(null, "config.xml");
 		con.registerBeans(reader.loadBeans());
 		
 		Orange orange = (Orange) con.getBeanWithDependencies("orange");
