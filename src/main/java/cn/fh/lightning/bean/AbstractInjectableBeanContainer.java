@@ -2,6 +2,7 @@ package cn.fh.lightning.bean;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -43,6 +44,16 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 			}
 		} else {
 			throw new InvalidBeanTypeException("不支持该bean类型:" + bean.getBeanClass());
+		}
+	}
+	
+	/**
+	 * 一次注册多个bean
+	 */
+	@Override
+	public final void registerBeans(List<Bean> beanList) {
+		for (Bean bean : beanList) {
+			registerBean(bean);
 		}
 	}
 

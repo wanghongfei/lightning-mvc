@@ -1,17 +1,32 @@
 package cn.fh.lightning.bean.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import cn.fh.lightning.bean.BasicInjectableBeanContainer;
 import cn.fh.lightning.bean.Bean;
 import cn.fh.lightning.bean.SingletonBean;
+import cn.fh.lightning.resource.Reader;
+import cn.fh.lightning.resource.XmlReader;
 
 public class BasicInjectableContainerTest {
+	@Test
+	public void injectByXmlTest() throws Exception {
+		BasicInjectableBeanContainer con = new BasicInjectableBeanContainer();
+		
+		Reader reader = new XmlReader("config.xml");
+		con.registerBeans(reader.loadBeans());
+		
+		Orange orange = (Orange) con.getBeanWithDependencies("orange");
+		assertNotNull("没有得到orange", orange);
+		assertNotNull("orange的依赖apple对象没有被注入", orange.getApple());
+	}
+	
 	@Test
 	public void multiplyInjectTest() throws Exception {
 		BasicInjectableBeanContainer con = new BasicInjectableBeanContainer();
