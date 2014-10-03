@@ -5,3 +5,4 @@ lightning-mvc
 
 #### Class Diagram
 * <img src="https://raw.githubusercontent.com/wanghongfei/lightning-mvc/master/doc/diagram.png" />
+* <img src="https://raw.githubusercontent.com/wanghongfei/lightning-mvc/master/doc/mvc-diagram.png" />
