@@ -22,6 +22,7 @@ import cn.fh.lightning.mvc.Controller;
 import cn.fh.lightning.mvc.InternalModel;
 import cn.fh.lightning.mvc.RequestMap;
 import cn.fh.lightning.mvc.RequestType;
+import cn.fh.lightning.mvc.StringUtil;
 import cn.fh.lightning.mvc.UrlRequestMap;
 import cn.fh.lightning.mvc.exception.InvalidControllerException;
 import cn.fh.lightning.mvc.exception.ViewNotFoundException;
@@ -87,20 +88,16 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		// 得到请求类型
 		RequestType reqType = RequestType.valueOf(req.getMethod());
 		
-		String uri = req.getRequestURI().substring(1);
-		int index = uri.indexOf('/');
-		String trimmed = uri.substring(index);
-		System.out.println("收到请求[" + trimmed + "]");
+		String requestPath = StringUtil.trimURI(req.getRequestURI());
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("收到请求[" + req.getRequestURI() + "]");
+			logger.debug("收到请求[" + requestPath + "]");
 		}
 		
 		// 得到控制器
-		//RequestMap rMap = findController(req.getRequestURI(), reqType);
-		RequestMap rMap = findController(trimmed, reqType);
+		RequestMap rMap = findController(requestPath, reqType);
 		if (null == rMap) {
-			logger.info("没有与[" + req.getRequestURI() + "]对应的控制器!");
+			logger.info("没有与[" + requestPath + "]对应的控制器!");
 			return;
 		}
 		

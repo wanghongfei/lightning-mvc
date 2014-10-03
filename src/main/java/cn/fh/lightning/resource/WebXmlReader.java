@@ -38,8 +38,10 @@ public class WebXmlReader extends XmlReader {
 		String controller = beanTag.getAttribute("controller");
 		String reqType = beanTag.getAttribute("request-type");
 		
-		System.out.println(beanTag.getTagName());
-		System.out.println("读入URL map:[" + url + "],[" + controller + "],[" + reqType + "]");
+		if (logger.isDebugEnabled()) {
+			logger.debug("<" + beanTag.getTagName() + ">");
+			logger.debug("读入URL map:[" + url + "],[" + controller + "],[" + reqType + "]");
+		}
 		
 		Bean mapBean = new UrlRequestMap(url, controller, RequestType.valueOf(reqType));
 		beanList.add(mapBean);
