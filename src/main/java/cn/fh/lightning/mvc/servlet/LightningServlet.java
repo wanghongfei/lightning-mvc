@@ -2,6 +2,7 @@ package cn.fh.lightning.mvc.servlet;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -14,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.fh.lightning.bean.BasicInjectableBeanContainer;
-import cn.fh.lightning.bean.Bean;
 import cn.fh.lightning.bean.InjectableBeanContainer;
 import cn.fh.lightning.exception.BeanNotFoundException;
 import cn.fh.lightning.mvc.BasicModel;
@@ -73,10 +73,29 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		ioc.registerBeans(reader.loadBeans());
 		// 将容器放到Servet上下文中
 		event.getServletContext().setAttribute(BEAN_CONTAINER_ATTRIBUTE, ioc);
+		
+		doPackageScan(event.getServletContext(), "cn.fh.sample");
 
 		logger.info("容器启动完毕");
 	}
 
+	private String[] doPackageScan(ServletContext ctx, String packageName) {
+		Set<String> classes = ctx.getResourcePaths("/WEB-INF/classes/" + packageName.replace('.', '/'));
+		for (String name : classes) {
+			System.out.println(splitClassName(name));
+		}
+		
+		return null;
+	}
+	
+	private String splitClassName(String path) {
+		int splashPos = path.lastIndexOf("/WEB-INF/classes/") + "/WEB-INF/classes/".length();
+		int pointPos = path.lastIndexOf('.');
+		
+		String className = path.substring(splashPos, pointPos).replace('/', '.');
+		return className;
+		
+	}
 
 
 
