@@ -77,6 +77,9 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		doPackageScan(event.getServletContext(), "cn.fh.sample");
 
 		logger.info("容器启动完毕");
+		
+		
+		// 载入web页面role配置
 	}
 
 	private String[] doPackageScan(ServletContext ctx, String packageName) {

@@ -2,6 +2,7 @@ package cn.fh.lightning.security;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -43,6 +45,9 @@ public class PageProtectionFilter implements Filter, ServletContextListener {
 		
 	}
 
+	/**
+	 * Servlet上下文初始化时，解析secirity-page.xml文件
+	 */
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		if (logger.isDebugEnabled()) {
@@ -102,7 +107,15 @@ public class PageProtectionFilter implements Filter, ServletContextListener {
 			logger.debug("请求url:" + url);
 		}
 		
-		
+		// 检查权限
+		if (false == checkRole(url, req.getSession())) {
+			HttpServletResponse resp = (HttpServletResponse) response;
+			OutputStream out = resp.getOutputStream();
+			out.write("bad role".getBytes());
+			out.close();
+			
+			return;
+		}
 		
 		
 		chain.doFilter(request, response);
@@ -186,7 +199,7 @@ public class PageProtectionFilter implements Filter, ServletContextListener {
 			}
 		}
 		
-		return null;
+		return map;
 	}
 	
 	/**

@@ -3,7 +3,7 @@ package cn.fh.lightning.bean;
 import java.util.Map;
 
 /**
- * 单例bean
+ * Bean living in singleton scope.
  * @author whf
  *
  */

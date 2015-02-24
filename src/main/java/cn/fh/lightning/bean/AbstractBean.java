@@ -3,26 +3,40 @@ package cn.fh.lightning.bean;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class partly implements the Bean interface.
+ */
 public abstract class AbstractBean implements Bean {
+	/**
+	 * A map containing the properties for this bean.
+	 */
 	protected Map<String, String> dependencyMap = new HashMap<String, String>();
 
-	protected Object actuallBean;
 	/**
-	 * bean在容器中的名字
+	 * The actual bean component object.
 	 */
+	protected Object actuallBean;
+
 	protected String beanName;
 	
 	/**
-	 * 通过指定bean名和实际的bean对象来构造bean
-	 * 
+	 * Construct a bean component with name.
+	 *
 	 * @param beanName
-	 * @param obj 实际的对象
+	 * @param obj
 	 */
 	public AbstractBean(String beanName, Object obj) {
 		this.beanName = beanName;
 		this.actuallBean = obj;
 	}
-	
+
+	/**
+	 * Construct bean component with name and properties.
+	 *
+	 * @param beanName
+	 * @param obj
+	 * @param propMap A map containing the properties.
+	 */
 	public AbstractBean(String beanName, Object obj, Map<String, String> propMap) {
 		this(beanName, obj);
 		
@@ -58,6 +72,11 @@ public abstract class AbstractBean implements Bean {
 		return this.actuallBean.getClass().getName();
 	}
 
+	/**
+	 * Use bean name to determine 2 beans are equal or not.
+	 * @param obj
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {

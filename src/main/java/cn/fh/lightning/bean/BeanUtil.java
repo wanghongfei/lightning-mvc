@@ -1,13 +1,13 @@
 package cn.fh.lightning.bean;
 
-import java.util.Map;
-
 import cn.fh.lightning.exception.BeanNotFoundException;
+
+import java.util.Map;
 
 public class BeanUtil {
 	/**
-	 * 实例化一个单例bean
-	 * 
+	 * Create a singleton bean.
+	 *
 	 * @param id
 	 * @param className
 	 * @return

@@ -1,15 +1,14 @@
 package cn.fh.lightning.bean;
 
+import cn.fh.lightning.exception.BeanAlreadyExistException;
+import cn.fh.lightning.exception.BeanNotFoundException;
+import cn.fh.lightning.exception.InvalidBeanTypeException;
+import org.slf4j.Logger;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-
-import cn.fh.lightning.exception.BeanAlreadyExistException;
-import cn.fh.lightning.exception.BeanNotFoundException;
-import cn.fh.lightning.exception.InvalidBeanTypeException;
 
 public abstract class AbstractInjectableBeanContainer implements InjectableBeanContainer {
 	public static Logger logger;
@@ -20,9 +19,6 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 	protected Map<String, Bean> beanMap = new HashMap<String, Bean>();
 	
 
-	/**
-	 * 只获取bean, 不进行DI
-	 */
 	@Override
 	public final Object getBean(String name) {
 		Bean bean = this.beanMap.get(name);
@@ -32,24 +28,21 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 
 	@Override
 	public final void registerBean(Bean bean) {
-		// 注册一个单例bean
+		// register a singleton bean
 		if (bean instanceof SingletonBean) {
 			SingletonBean sBean = (SingletonBean)bean;
-			
-			// 判断容器中是否已经存在一个此bean了
+
+			// determine whether this name already exists in container
 			if (false == this.beanMap.containsKey(sBean)) {
 				this.beanMap.put(sBean.getBeanName(), sBean);
 			} else {
-				throw new BeanAlreadyExistException("bean名[" + bean.getBeanName() + "]已经在容器中存在");
+				throw new BeanAlreadyExistException("bean名[" + bean.getBeanName() + "]已经在容器中存在. [bean " + bean.getBeanName() + " already exists]");
 			}
 		} else {
-			throw new InvalidBeanTypeException("不支持该bean类型:" + bean.getBeanClass());
+			throw new InvalidBeanTypeException("不支持该bean类型:" + bean.getBeanClass() + ", [unsupported bean type:" + bean.getBeanClass() + "]");
 		}
 	}
 	
-	/**
-	 * 一次注册多个bean
-	 */
 	@Override
 	public final void registerBeans(List<Bean> beanList) {
 		for (Bean bean : beanList) {
@@ -57,9 +50,6 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 		}
 	}
 
-	/**
-	 * 获取bean并执行DI操作
-	 */
 	@Override
 	public final Object getBeanWithDependencies(String beanName) {
 		Bean bean = this.beanMap.get(beanName);
@@ -67,44 +57,49 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 		if (logger.isDebugEnabled()) {
 			logger.debug("查找[" + beanName + "]");
 		}
-		// 容器中没有此bean
+
+		// no bean found
 		if (null == bean) {
 			return null;
 		}
-		
-		// 找到此bean,查检依赖
+
+		// bean is found
+		// prepare for DI
 		Object actObject = bean.getActuallBean();
 		Map<String, String> depMap = bean.getDependencies();
 
-		// 该bean没有依赖
+		// this bean has no dependencies
 		if (true == depMap.isEmpty()) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("[" + bean.getBeanName() + "]没有依赖");
 			}
 
 			return actObject;
-		} else { // 依赖注入
+		} else {
+			// perform DI
 			if (logger.isDebugEnabled()) {
 				logger.debug("[" + bean.getBeanName() + "]有依赖");
 			}
-			
-			// 得到该类声明的所有成员变量
+
+			// get all declared fields of this component
 			Field[] fields = actObject.getClass().getDeclaredFields();
 			
 			
 			for (Map.Entry<String, String> entry : depMap.entrySet()) {
-				// 递归调用
-				// 从容器中查找actObject所依赖的类
 				if (logger.isDebugEnabled()) {
 					logger.debug("[" + bean.getBeanName() + "]查找依赖:" + entry.getKey());
 				}
 
+				// recursive invocation
+				// retrieve the dependency from container
 				Object depObject = getBeanWithDependencies(entry.getValue());
 
+				// throw Runtime exception if dependency was not found
 				if (null == depObject) {
 					throw new BeanNotFoundException("容器中没有找到[" + entry.getValue() + "]");
 				}
-				
+
+				// inject dependency in reflection way.
 				injectField(actObject, fields, entry.getKey(), depObject);
 			}
 		}
@@ -125,6 +120,9 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 	protected boolean injectField(Object objToInject, Field[] allFields, String fieldName, Object fieldValue) {
 		for (int ix = 0 ; ix < allFields.length ; ++ix) {
 			if (allFields[ix].getName().equals(fieldName)) {
+
+				// this field could be private,
+				// so I have to change its accessibility to public in order to set its value
 				allFields[ix].setAccessible(true);
 
 				try {
