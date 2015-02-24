@@ -4,18 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class partly implements the Bean interface.
+ * This class partly implements the #{@link Bean} interface.
  */
 public abstract class AbstractBean implements Bean {
 	/**
-	 * A map containing the properties for this bean.
+	 * A map containing the properties(dependencies) for this bean.
+	 * The key of this map is field name and the value of this map is the qualified name of a {@link Class}.
+	 * e.g.. key: username, value: java.lang.String
 	 */
 	protected Map<String, String> dependencyMap = new HashMap<String, String>();
 
 	/**
 	 * The actual bean component object.
 	 */
-	protected Object actuallBean;
+	protected Object actualBean;
 
 	protected String beanName;
 	
@@ -27,7 +29,7 @@ public abstract class AbstractBean implements Bean {
 	 */
 	public AbstractBean(String beanName, Object obj) {
 		this.beanName = beanName;
-		this.actuallBean = obj;
+		this.actualBean = obj;
 	}
 
 	/**
@@ -53,8 +55,8 @@ public abstract class AbstractBean implements Bean {
 	}
 	
 	@Override
-	public Object getActuallBean() {
-		return this.actuallBean;
+	public Object getActualBean() {
+		return this.actualBean;
 	}
 
 	@Override
@@ -69,7 +71,7 @@ public abstract class AbstractBean implements Bean {
 
 	@Override
 	public String getBeanClass() {
-		return this.actuallBean.getClass().getName();
+		return this.actualBean.getClass().getName();
 	}
 
 	/**

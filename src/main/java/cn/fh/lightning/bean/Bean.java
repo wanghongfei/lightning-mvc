@@ -7,5 +7,5 @@ public interface Bean {
 	public String getBeanName();
 	public String getBeanClass();
 	
-	public Object getActuallBean();
+	public Object getActualBean();
 }

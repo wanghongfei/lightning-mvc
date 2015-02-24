@@ -2,6 +2,9 @@ package cn.fh.lightning.bean;
 
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation for {@link AbstractInjectableBeanContainer}
+ */
 public class BasicInjectableBeanContainer extends
 		AbstractInjectableBeanContainer {
 	

@@ -56,7 +56,7 @@ public class UrlRequestMap implements RequestMap {
 	}
 
 	@Override
-	public Object getActuallBean() {
+	public Object getActualBean() {
 		// TODO Auto-generated method stub
 		return null;
 	}

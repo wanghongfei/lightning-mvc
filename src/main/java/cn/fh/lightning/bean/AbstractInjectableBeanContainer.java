@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Partial implementation of the {@link InjectableBeanContainer} interface.
+ */
 public abstract class AbstractInjectableBeanContainer implements InjectableBeanContainer {
 	public static Logger logger;
 
@@ -23,7 +26,7 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 	public final Object getBean(String name) {
 		Bean bean = this.beanMap.get(name);
 
-		return bean == null ? null : bean.getActuallBean();
+		return bean == null ? null : bean.getActualBean();
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 
 		// bean is found
 		// prepare for DI
-		Object actObject = bean.getActuallBean();
+		Object actObject = bean.getActualBean();
 		Map<String, String> depMap = bean.getDependencies();
 
 		// this bean has no dependencies
