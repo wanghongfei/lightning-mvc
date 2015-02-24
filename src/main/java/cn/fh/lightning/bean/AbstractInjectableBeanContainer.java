@@ -17,7 +17,7 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 	public static Logger logger;
 
 	/**
-	 * 持有bean对象
+	 * This map contains all bean components.
 	 */
 	protected Map<String, Bean> beanMap = new HashMap<String, Bean>();
 	

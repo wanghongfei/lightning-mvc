@@ -1,16 +1,14 @@
 package cn.fh.lightning.resource;
 
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
+import cn.fh.lightning.bean.Bean;
+import cn.fh.lightning.mvc.RequestType;
+import cn.fh.lightning.mvc.UrlRequestMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import cn.fh.lightning.bean.Bean;
-import cn.fh.lightning.mvc.RequestType;
-import cn.fh.lightning.mvc.UrlRequestMap;
+import javax.servlet.ServletContext;
+import java.util.List;
 
 public class WebXmlReader extends XmlReader {
 	public static Logger logger = LoggerFactory.getLogger(WebXmlReader.class);
@@ -43,7 +41,7 @@ public class WebXmlReader extends XmlReader {
 			logger.debug("读入URL map:[" + url + "],[" + controller + "],[" + reqType + "]");
 		}
 		
-		Bean mapBean = new UrlRequestMap(url, controller, RequestType.valueOf(reqType));
+		Bean mapBean = new UrlRequestMapping(url, controller, RequestType.valueOf(reqType));
 		beanList.add(mapBean);
 	}
 }

@@ -1,8 +1,16 @@
 package cn.fh.lightning.mvc.servlet;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
+import cn.fh.lightning.bean.BasicInjectableBeanContainer;
+import cn.fh.lightning.bean.InjectableBeanContainer;
+import cn.fh.lightning.exception.BeanNotFoundException;
+import cn.fh.lightning.mvc.*;
+import cn.fh.lightning.mvc.exception.InvalidControllerException;
+import cn.fh.lightning.mvc.exception.ViewNotFoundException;
+import cn.fh.lightning.resource.Reader;
+import cn.fh.lightning.resource.WebXmlReader;
+import cn.fh.lightning.resource.XmlReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -10,25 +18,9 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import cn.fh.lightning.bean.BasicInjectableBeanContainer;
-import cn.fh.lightning.bean.InjectableBeanContainer;
-import cn.fh.lightning.exception.BeanNotFoundException;
-import cn.fh.lightning.mvc.BasicModel;
-import cn.fh.lightning.mvc.Controller;
-import cn.fh.lightning.mvc.InternalModel;
-import cn.fh.lightning.mvc.RequestMap;
-import cn.fh.lightning.mvc.RequestType;
-import cn.fh.lightning.mvc.StringUtil;
-import cn.fh.lightning.mvc.UrlRequestMap;
-import cn.fh.lightning.mvc.exception.InvalidControllerException;
-import cn.fh.lightning.mvc.exception.ViewNotFoundException;
-import cn.fh.lightning.resource.Reader;
-import cn.fh.lightning.resource.WebXmlReader;
-import cn.fh.lightning.resource.XmlReader;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 public class LightningServlet extends BasicServlet implements ServletContextListener {
 	public static Logger logger = LoggerFactory.getLogger(LightningServlet.class);
@@ -43,7 +35,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	public static String DEFAULT_WEB_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-url-map.xml";
 	
 	
-	private RequestMap[] reqMaps;
+	private RequestMapping[] reqMaps;
 	
 	
 	@Override
@@ -117,7 +109,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		}
 		
 		// 得到控制器
-		RequestMap rMap = findController(requestPath, reqType);
+		RequestMapping rMap = findController(requestPath, reqType);
 		if (null == rMap) {
 			logger.info("没有与[" + requestPath + "]对应的控制器!");
 			return;
@@ -166,8 +158,8 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	 * @param reqType
 	 * @return
 	 */
-	private RequestMap findController(String url, RequestType reqType) {
-		for (RequestMap rMap : this.reqMaps) {
+	private RequestMapping findController(String url, RequestType reqType) {
+		for (RequestMapping rMap : this.reqMaps) {
 			if (rMap.getUrl().equals(url) && rMap.getRequestType() == reqType) {
 				return rMap;
 			}
@@ -187,7 +179,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	
 	private void initRequestMap(ServletContext ctx) {
 		Reader reader = new WebXmlReader(ctx, DEFAULT_WEB_CONFIGURE_FILE_LOCATION);
-		this.reqMaps = reader.loadBeans().toArray(new UrlRequestMap[1]);
+		this.reqMaps = reader.loadBeans().toArray(new UrlRequestMapping[1]);
 		//getContainer().registerBeans(reader.loadBeans());
 	}
 	

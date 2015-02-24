@@ -7,16 +7,16 @@ import java.util.Map;
  * @author whf
  *
  */
-public class UrlRequestMap implements RequestMap {
+public class UrlRequestMapping implements RequestMapping {
 	private String url;
 	private String controllerName;
 	private RequestType requestType;
 	
-	public UrlRequestMap() {
+	public UrlRequestMapping() {
 		
 	}
 	
-	public UrlRequestMap(String url, String controllerName, RequestType type) {
+	public UrlRequestMapping(String url, String controllerName, RequestType type) {
 		this.url = url;
 		this.controllerName = controllerName;
 		this.requestType = type;
