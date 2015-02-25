@@ -10,6 +10,10 @@ import org.w3c.dom.Element;
 import javax.servlet.ServletContext;
 import java.util.List;
 
+/**
+ * This class is used to convert XML configuration file to
+ * a {@link java.util.List} of {@link cn.fh.lightning.bean.Bean}.
+ */
 public class WebXmlReader extends XmlReader {
 	public static Logger logger = LoggerFactory.getLogger(WebXmlReader.class);
 
@@ -28,7 +32,7 @@ public class WebXmlReader extends XmlReader {
 	}
 
 	/**
-	 * 解析<url-map>标签
+     * Analyze <code><url-map></code> tag.
 	 */
 	@Override
 	protected void parseBeanTag(Element beanTag, Resource r, List<Bean> beanList) {

@@ -6,24 +6,22 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 一个XML配置文件资源
- * @author whf
+ * This class represents a {@link cn.fh.lightning.resource.Resource} in the form
+ * of a XML file in file system.
  *
+ * @author whf
  */
 public class FileSystemXmlResource implements Resource {
 	private String path;
 
 	/**
-	 * 使用xml文件路径构造XmlResource对象
-	 * @param path
+     * Construct a new object with the path of the XML file.
+	 * @param path The path in file system of the XML file.
 	 */
 	public FileSystemXmlResource(String path) {
 		this.path = path;
 	}
 
-	/**
-	 * 得到该xml文件的输入流
-	 */
 	@Override
 	public InputStream getInputStream() throws IOException {
 		File xmlFile = new File(path);

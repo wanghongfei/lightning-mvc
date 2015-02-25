@@ -1,8 +1,8 @@
 package cn.fh.lightning.resource;
 
-import java.util.List;
-
 import cn.fh.lightning.bean.Bean;
+
+import java.util.List;
 
 public abstract class AbstractReader implements Reader {
 	protected Resource[] resources;
@@ -10,10 +10,14 @@ public abstract class AbstractReader implements Reader {
 	
 	@Override
 	public List<Bean> loadBeans() {
-		// 具体载入过程由子类实现
+        // delegate to doLoadBean() method
 		return doLoadBeans();
 	}
-	
+
+    /**
+     * This method will be invoked in {@link #loadBeans()} method.
+     * Derived class should override this method.
+     */
 	protected abstract List<Bean> doLoadBeans();
 
 }
