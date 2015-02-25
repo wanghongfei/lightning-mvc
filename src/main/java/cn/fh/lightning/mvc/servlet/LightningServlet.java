@@ -98,7 +98,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	 * GET, POST请求都会交由此方法处理
 	 */
 	@Override
-	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) {
+	protected void processRequest(HttpServletRequest req, HttpServletResponse resp, Constants.RequestMethod reqMethod) {
 		// 得到请求类型
 		RequestType reqType = RequestType.valueOf(req.getMethod());
 		

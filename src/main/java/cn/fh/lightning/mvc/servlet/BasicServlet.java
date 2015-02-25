@@ -1,6 +1,8 @@
 package cn.fh.lightning.mvc.servlet;
 
-import java.io.IOException;
+import cn.fh.lightning.mvc.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -8,9 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 public abstract class BasicServlet extends HttpServlet {
 	public static Logger logger = LoggerFactory.getLogger(BasicServlet.class);
@@ -19,20 +19,28 @@ public abstract class BasicServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		logger.info("正在初始化[" + getClass().getName() + "]");
 
-		// 由子类实现该方法
+        // derived class will do initial job
 		initServlet(config.getServletContext());
 
 		logger.info("[" + getClass().getName() + "]初始化完成");
 	}
-	
-	protected abstract void processRequest(HttpServletRequest req, HttpServletResponse resp);
-	
+
+    /**
+     * Derived class should implement this method to actually process request.
+     */
+	protected abstract void processRequest(HttpServletRequest req, HttpServletResponse resp, Constants.RequestMethod reqMethod);
+
+    /**
+     * Derived class should implement this method to do initialization job.
+     */
+    protected abstract void initServlet(ServletContext ctx);
+
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		processRequest(req, resp);
+		processRequest(req, resp, Constants.RequestMethod.GET);
 	}
 
 
@@ -40,11 +48,6 @@ public abstract class BasicServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		processRequest(req, resp);
+		processRequest(req, resp, Constants.RequestMethod.POST);
 	}
-
-
-	protected abstract void initServlet(ServletContext ctx);
-	
-
 }
