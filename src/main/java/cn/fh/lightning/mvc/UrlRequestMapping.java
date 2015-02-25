@@ -3,9 +3,10 @@ package cn.fh.lightning.mvc;
 import java.util.Map;
 
 /**
- * 一个URL请求对应一个Controller
- * @author whf
+ * This class is used to group a controller and an URL together, indicating that this
+ * controller is supposed to handle this URL.
  *
+ * @author whf
  */
 public class UrlRequestMapping implements RequestMapping {
 	private String url;
@@ -22,6 +23,7 @@ public class UrlRequestMapping implements RequestMapping {
 		this.requestType = type;
 	}
 
+    // *** implementations for RequestMapping interface *** //
 	@Override
 	public String getUrl() {
 		return this.url;
@@ -37,27 +39,26 @@ public class UrlRequestMapping implements RequestMapping {
 		return this.requestType;
 	}
 
-	// *** 以下为空实现 *** //
+
+
+	// *** implementations for Bean interface *** //
 	@Override
 	public Map<String, String> getDependencies() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getBeanName() {
-		return null;
+        return "urlRequestMapping";
 	}
 
 	@Override
 	public String getBeanClass() {
-		// TODO Auto-generated method stub
-		return null;
+        return getClass().getCanonicalName();
 	}
 
 	@Override
 	public Object getActualBean() {
-		// TODO Auto-generated method stub
-		return null;
+        return this;
 	}
 }
