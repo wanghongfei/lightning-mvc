@@ -1,8 +1,6 @@
 package cn.fh.lightning.bean;
 
-import cn.fh.lightning.exception.BeanAlreadyExistException;
-import cn.fh.lightning.exception.BeanNotFoundException;
-import cn.fh.lightning.exception.InvalidBeanTypeException;
+import cn.fh.lightning.exception.*;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
@@ -111,14 +109,14 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 	}
 	
 	/**
-	 * 向指定成员变量注入指定的对象
+     * Inject value to the specified field in target object.
+	 *
+	 * @param objToInject The target object that contains the field.
+	 * @param allFields An array of {@link java.lang.reflect.Field} objects that declared in the target object.
+	 * @param fieldName The name of the field to inject to.
+	 * @param fieldValue The value of the field to be injected.
 	 * 
-	 * @param objToInject 包含该成员变量的对象
-	 * @param allFields 对象的所有成员变量
-	 * @param fieldName 要注入的成员变量名
-	 * @param fieldValue 要注入的值
-	 * 
-	 * @return
+	 * @return Return true indicates successful injection, otherwise return false.
 	 */
 	protected boolean injectField(Object objToInject, Field[] allFields, String fieldName, Object fieldValue) {
 		for (int ix = 0 ; ix < allFields.length ; ++ix) {
@@ -131,11 +129,13 @@ public abstract class AbstractInjectableBeanContainer implements InjectableBeanC
 				try {
 					allFields[ix].set(objToInject, fieldValue);
 				} catch (IllegalArgumentException e) {
-					logger.error("注入成员变量[" + allFields[ix].getName() + "]失败");
+					//logger.error("注入成员变量[" + allFields[ix].getName() + "]失败");
 					e.printStackTrace();
+                    throw new InjectionFailedException("注入成员变量[" + allFields[ix].getName() + "]失败. Injection to field [" + allFields[ix].getName() + "] failed");
 				} catch (IllegalAccessException e) {
-					logger.error("注入成员变量[" + allFields[ix].getName() + "]失败");
+					//logger.error("注入成员变量[" + allFields[ix].getName() + "]失败");
 					e.printStackTrace();
+                    throw new InjectionFailedException("注入成员变量[" + allFields[ix].getName() + "]失败. Injection to field [" + allFields[ix].getName() + "] failed");
 				}
 
 				return true;
