@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lightning-config>
+	<bean id="homeController" class="cn.fh.lightning.bean.test.HomeController"></bean>
+</lightning-config>

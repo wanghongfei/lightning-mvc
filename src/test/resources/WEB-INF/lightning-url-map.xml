@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lightning-config>
+	<map url="/home" controller="homeController" request-type="GET"></map>
+</lightning-config>
