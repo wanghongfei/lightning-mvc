@@ -15,7 +15,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
 /**
- * This scanner is used to find all classes in a package.
+ * This scanner is used to find out all classes in a package.
  * Created by whf on 15-2-26.
  */
 public class ClasspathPackageScanner implements PackageScanner {
@@ -78,8 +78,8 @@ public class ClasspathPackageScanner implements PackageScanner {
         // Get classes in that package.
         // If the web server unzips the jar file, then the classes will exist in the form of
         // normal file in the directory.
-        // If the web server does not unzip the jar file, then classes will be exist in jar file.
-        List<String> names = null;
+        // If the web server does not unzip the jar file, then classes will exist in jar file.
+        List<String> names = null; // contains the name of the class file. e.g., Apple.class will be stored as "Apple"
         if (isJarFile(filePath)) {
             // jar file
             if (logger.isDebugEnabled()) {
@@ -98,7 +98,8 @@ public class ClasspathPackageScanner implements PackageScanner {
 
         for (String name : names) {
             if (isClassFile(name)) {
-                nameList.add(basePackage + "." + StringUtil.trimExtension(name));
+                //nameList.add(basePackage + "." + StringUtil.trimExtension(name));
+                nameList.add(toFullyQualifiedName(name, basePackage));
             } else {
                 // this is a directory
                 // check this directory for more classes
@@ -114,6 +115,18 @@ public class ClasspathPackageScanner implements PackageScanner {
         }
 
         return nameList;
+    }
+
+    /**
+     * Convert short class name to fully qualified name.
+     * e.g., String -> java.lang.String
+     */
+    private String toFullyQualifiedName(String shortName, String basePackage) {
+        StringBuilder sb = new StringBuilder(basePackage);
+        sb.append('.');
+        sb.append(StringUtil.trimExtension(shortName));
+
+        return sb.toString();
     }
 
     private List<String> readFromJarFile(String jarPath, String splashedPackageName) throws IOException {
