@@ -1,6 +1,6 @@
 package cn.fh.lightning.mvc.test;
 
-import cn.fh.lightning.bean.InjectableBeanContainer;
+import cn.fh.lightning.bean.container.InjectableBeanContainer;
 import cn.fh.lightning.bean.test.HomeController;
 import cn.fh.lightning.mvc.servlet.LightningServlet;
 import org.junit.Before;

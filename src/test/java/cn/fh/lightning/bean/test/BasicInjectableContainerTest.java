@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import cn.fh.lightning.bean.BasicInjectableBeanContainer;
+import cn.fh.lightning.bean.container.BasicInjectableBeanContainer;
 import cn.fh.lightning.bean.Bean;
 import cn.fh.lightning.bean.SingletonBean;
 import cn.fh.lightning.resource.Reader;

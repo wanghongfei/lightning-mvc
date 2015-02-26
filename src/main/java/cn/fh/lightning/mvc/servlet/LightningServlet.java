@@ -1,8 +1,8 @@
 package cn.fh.lightning.mvc.servlet;
 
 import cn.fh.lightning.StringUtil;
-import cn.fh.lightning.bean.BasicInjectableBeanContainer;
-import cn.fh.lightning.bean.InjectableBeanContainer;
+import cn.fh.lightning.bean.container.BasicInjectableBeanContainer;
+import cn.fh.lightning.bean.container.InjectableBeanContainer;
 import cn.fh.lightning.exception.BeanNotFoundException;
 import cn.fh.lightning.mvc.*;
 import cn.fh.lightning.mvc.exception.InvalidControllerException;

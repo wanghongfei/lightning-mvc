@@ -1,4 +1,4 @@
-package cn.fh.lightning.bean;
+package cn.fh.lightning.bean.container;
 
 import org.slf4j.LoggerFactory;
 

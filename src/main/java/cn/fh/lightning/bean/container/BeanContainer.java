@@ -1,4 +1,6 @@
-package cn.fh.lightning.bean;
+package cn.fh.lightning.bean.container;
+
+import cn.fh.lightning.bean.Bean;
 
 import java.util.List;
 

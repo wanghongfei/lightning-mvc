@@ -1,5 +1,7 @@
-package cn.fh.lightning.bean;
+package cn.fh.lightning.bean.container;
 
+import cn.fh.lightning.bean.Bean;
+import cn.fh.lightning.bean.SingletonBean;
 import cn.fh.lightning.exception.*;
 import org.slf4j.Logger;
 

@@ -1,4 +1,4 @@
-package cn.fh.lightning.bean;
+package cn.fh.lightning.bean.container;
 
 /**
  * Interface for Bean Containers that support dependency injection.
