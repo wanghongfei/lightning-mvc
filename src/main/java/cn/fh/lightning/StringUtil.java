@@ -1,4 +1,4 @@
-package cn.fh.lightning.mvc;
+package cn.fh.lightning;
 
 public class StringUtil {
 	/**
