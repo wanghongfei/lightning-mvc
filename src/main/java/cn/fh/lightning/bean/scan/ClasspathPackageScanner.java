@@ -15,6 +15,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
 /**
+ * This scanner is used to find all classes in a package.
  * Created by whf on 15-2-26.
  */
 public class ClasspathPackageScanner implements PackageScanner {
@@ -74,9 +75,13 @@ public class ClasspathPackageScanner implements PackageScanner {
         URL url = cl.getResource(splashPath);
         String filePath = StringUtil.getRootPath(url);
 
-        // get classes in that package
+        // Get classes in that package.
+        // If the web server unzips the jar file, then the classes will exist in the form of
+        // normal file in the directory.
+        // If the web server does not unzip the jar file, then classes will be exist in jar file.
         List<String> names = null;
         if (isJarFile(filePath)) {
+            // jar file
             if (logger.isDebugEnabled()) {
                 logger.debug("{} 是一个JAR包", filePath);
             }
