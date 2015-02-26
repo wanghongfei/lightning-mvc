@@ -11,6 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 public class HomeController implements Controller {
     @Override
     public String handle(HttpServletRequest request, Model model) {
-        return null;
+        return "home.jsp";
     }
 }

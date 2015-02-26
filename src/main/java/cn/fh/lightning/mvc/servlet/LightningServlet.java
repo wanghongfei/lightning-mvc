@@ -64,7 +64,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		InjectableBeanContainer ioc = new BasicInjectableBeanContainer();
         // register beans parsed from configuration file
 		ioc.registerBeans(reader.loadBeans());
-        // put IoC container into servet context
+        // put IoC container into servlet context
 		event.getServletContext().setAttribute(BEAN_CONTAINER_ATTRIBUTE, ioc);
 
         // scan package to find out more component
