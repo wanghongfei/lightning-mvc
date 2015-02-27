@@ -28,7 +28,38 @@ public class BeanUtil {
 		
 		return bean;
 	}
-	
+
+    /**
+     * Create a singleton bean with Class object.
+     */
+    public static Bean createSingletonBean(String id, Class clazz) {
+        Bean bean = null;
+
+        try {
+            bean = new SingletonBean(id, createInstance(clazz));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+        return bean;
+    }
+    
+    public static Bean createSingletonBean(String id, Class clazz, Map<String, String> propMap) {
+        Bean bean = null;
+
+        try {
+            bean = new SingletonBean(id, createInstance(clazz), propMap);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+        return bean;
+    }
+
 	/**
      * Initialize a singleton bean using a Map of dependencies.
      *
@@ -54,5 +85,9 @@ public class BeanUtil {
 	public static Object createInstance(String className) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		return Class.forName(className).newInstance();
 	}
+
+    public static Object createInstance(Class clazz) throws IllegalAccessException, InstantiationException {
+        return clazz.newInstance();
+    }
 	
 }

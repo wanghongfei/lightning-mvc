@@ -12,4 +12,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Dependency {
     boolean required() default true;
+    String name();
 }

@@ -46,7 +46,7 @@ public class WebClasspathPackageScanner implements PackageScanner, Bean {
                 // this is a class file
                 String canonicalName = StringUtil.splitClassNameFromPath(name);
                 if (logger.isDebugEnabled()) {
-                    logger.debug("发现组件{}", canonicalName);
+                    logger.debug("发现class->{}", canonicalName);
                 }
 
                 nameList.add(canonicalName);

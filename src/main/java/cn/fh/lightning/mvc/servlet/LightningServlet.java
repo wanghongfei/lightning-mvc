@@ -3,6 +3,7 @@ package cn.fh.lightning.mvc.servlet;
 import cn.fh.lightning.StringUtil;
 import cn.fh.lightning.bean.container.BasicInjectableBeanContainer;
 import cn.fh.lightning.bean.container.InjectableBeanContainer;
+import cn.fh.lightning.bean.scan.DefaultAnnotationProcessor;
 import cn.fh.lightning.bean.scan.PackageScanner;
 import cn.fh.lightning.exception.BeanNotFoundException;
 import cn.fh.lightning.mvc.*;
@@ -24,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,7 +40,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	public static String DEFAULT_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-config.xml";
 	public static String DEFAULT_WEB_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-url-map.xml";
 	
-	
+
 	private RequestMapping[] reqMaps;
 	
 	
@@ -87,45 +89,24 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 
 	private void doPackageScan(ServletContext ctx, String packageName) throws IOException {
         PackageScanner scan = new WebClasspathPackageScanner(packageName, ctx);
-        scan.getFullyQualifiedClassNameList();
+        List<String> nameList = scan.getFullyQualifiedClassNameList();
 
-		/*Set<String> classes = ctx.getResourcePaths("/WEB-INF/classes/" + packageName.replace('.', '/'));
+        if (null == nameList) {
+            logger.info("未发现注解组件");
 
-        if (logger.isDebugEnabled()) {
-            for (String name : classes) {
-                logger.debug(splitClassName(name));
-            }
+            return;
         }
 
-        for (String name : classes) {
-            String fullName = splitClassName(name);
-
+        for (String className : nameList) {
             try {
-                Class clazz = Class.forName(fullName);
-                boolean exist = clazz.isAnnotationPresent(Bean.class);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("发现组件{}", fullName);
-                }
-
+                Class clazz = Class.forName(className);
+                new DefaultAnnotationProcessor(clazz, getContainer(ctx));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        }*/
-
+        }
 	}
 
-    /**
-     * @deprecated
-     */
-	private String splitClassName(String path) {
-		int splashPos = path.lastIndexOf("/WEB-INF/classes/") + "/WEB-INF/classes/".length();
-		int pointPos = path.lastIndexOf('.');
-		
-		String className = path.substring(splashPos, pointPos).replace('/', '.');
-		return className;
-		
-	}
 
     /**
      * This method actually handles the request.
@@ -224,5 +205,12 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	private InjectableBeanContainer getContainer(HttpServletRequest req) {
 		return (InjectableBeanContainer)req.getServletContext().getAttribute(BEAN_CONTAINER_ATTRIBUTE);
 	}
+
+    /**
+     * Retrieve container from ServletContext
+     */
+    private InjectableBeanContainer getContainer(ServletContext ctx) {
+        return (InjectableBeanContainer) ctx.getAttribute(BEAN_CONTAINER_ATTRIBUTE);
+    }
 
 }
