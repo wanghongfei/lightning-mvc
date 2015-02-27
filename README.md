@@ -21,7 +21,6 @@ lightning-mvc
     </lightning-config>
 ```
 经过上述配置后，`apple`和`orange`就变成了IoC容器管理的组件，无需用户管理其生命周期。
-
 3. MVC框架配置. 在`/WEB-INF/lightning-url-map.xml`中声明自定义的控制器及其对应的URL:
 ```
     <?xml version="1.0" encoding="UTF-8"?>
@@ -30,4 +29,5 @@ lightning-mvc
     </lightning-config>
 ```
 `homeController`是用户实现的控制器，必须实现`Controller`接口。
+
 经过上述配置后，当用户发起`/home`GET请求后，框架会自动调用`homeController`的`handle()`方法来处理请求
