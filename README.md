@@ -8,8 +8,8 @@ lightning-mvc
 * 支持IoC, 依赖注入，通过注解定义组件、依赖
 
 #### 使用方法
-1. 将`lightning-mvc.jar`添加到classpath中
-2. 配置IoC容器. 在`/WEB-INF/lightning-config.xml`中声明组件:
+* 将`lightning-mvc.jar`添加到classpath中
+* 配置IoC容器. 在`/WEB-INF/lightning-config.xml`中声明组件:
 ```
     <?xml version="1.0"?>
     <lightning-config>
@@ -21,7 +21,7 @@ lightning-mvc
     </lightning-config>
 ```
 经过上述配置后，`apple`和`orange`就变成了IoC容器管理的组件，无需用户管理其生命周期。
-3. MVC框架配置. 在`/WEB-INF/lightning-url-map.xml`中声明自定义的控制器及其对应的URL:
+* MVC框架配置. 在`/WEB-INF/lightning-url-map.xml`中声明自定义的控制器及其对应的URL:
 ```
     <?xml version="1.0" encoding="UTF-8"?>
     <lightning-config>
