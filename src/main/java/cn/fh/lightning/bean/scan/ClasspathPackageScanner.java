@@ -75,6 +75,10 @@ public class ClasspathPackageScanner implements PackageScanner {
         URL url = cl.getResource(splashPath);
         String filePath = StringUtil.getRootPath(url);
 
+        if (logger.isDebugEnabled()) {
+            logger.debug("URL:{}, path:{}", url.toString(), filePath);
+        }
+
         // Get classes in that package.
         // If the web server unzips the jar file, then the classes will exist in the form of
         // normal file in the directory.

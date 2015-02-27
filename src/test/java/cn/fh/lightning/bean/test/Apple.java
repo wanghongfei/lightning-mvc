@@ -1,5 +1,8 @@
 package cn.fh.lightning.bean.test;
 
+import cn.fh.lightning.bean.annotation.Bean;
+
+@Bean("apple")
 public class Apple {
 	private Orange orange1;
 	private Orange orange2;

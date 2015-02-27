@@ -3,10 +3,14 @@ package cn.fh.lightning.mvc.servlet;
 import cn.fh.lightning.StringUtil;
 import cn.fh.lightning.bean.container.BasicInjectableBeanContainer;
 import cn.fh.lightning.bean.container.InjectableBeanContainer;
+import cn.fh.lightning.bean.scan.PackageScanner;
 import cn.fh.lightning.exception.BeanNotFoundException;
 import cn.fh.lightning.mvc.*;
 import cn.fh.lightning.mvc.exception.InvalidControllerException;
 import cn.fh.lightning.mvc.exception.ViewNotFoundException;
+import cn.fh.lightning.mvc.requestmapping.RequestMapping;
+import cn.fh.lightning.mvc.requestmapping.RequestType;
+import cn.fh.lightning.mvc.requestmapping.UrlRequestMapping;
 import cn.fh.lightning.resource.Reader;
 import cn.fh.lightning.resource.WebXmlReader;
 import cn.fh.lightning.resource.XmlReader;
@@ -21,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This is the main servlet that starts the lightning-mvc framework.
@@ -69,23 +72,52 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		event.getServletContext().setAttribute(BEAN_CONTAINER_ATTRIBUTE, ioc);
 
         // scan package to find out more component
-		doPackageScan(event.getServletContext(), "cn.fh.sample");
+        try {
+            doPackageScan(event.getServletContext(), "cn.fh.sample");
+        } catch (IOException e) {
+            logger.error("扫描组件失败");
+            e.printStackTrace();
+        }
 
-		logger.info("容器启动完毕");
+        logger.info("容器启动完毕");
 		
 		
 		// 载入web页面role配置
 	}
 
-	private String[] doPackageScan(ServletContext ctx, String packageName) {
-		Set<String> classes = ctx.getResourcePaths("/WEB-INF/classes/" + packageName.replace('.', '/'));
-		for (String name : classes) {
-			System.out.println(splitClassName(name));
-		}
-		
-		return null;
+	private void doPackageScan(ServletContext ctx, String packageName) throws IOException {
+        PackageScanner scan = new WebClasspathPackageScanner(packageName, ctx);
+        scan.getFullyQualifiedClassNameList();
+
+		/*Set<String> classes = ctx.getResourcePaths("/WEB-INF/classes/" + packageName.replace('.', '/'));
+
+        if (logger.isDebugEnabled()) {
+            for (String name : classes) {
+                logger.debug(splitClassName(name));
+            }
+        }
+
+        for (String name : classes) {
+            String fullName = splitClassName(name);
+
+            try {
+                Class clazz = Class.forName(fullName);
+                boolean exist = clazz.isAnnotationPresent(Bean.class);
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("发现组件{}", fullName);
+                }
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }*/
+
 	}
-	
+
+    /**
+     * @deprecated
+     */
 	private String splitClassName(String path) {
 		int splashPos = path.lastIndexOf("/WEB-INF/classes/") + "/WEB-INF/classes/".length();
 		int pointPos = path.lastIndexOf('.');
@@ -157,10 +189,10 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	}
 	
 	/**
-     * Find the {@link cn.fh.lightning.mvc.RequestMapping} implementation that contains controller that
+     * Find the {@link cn.fh.lightning.mvc.requestmapping.RequestMapping} implementation that contains controller that
      * is supposed to handle this request
 	 *
-	 * @return The implementation of {@link cn.fh.lightning.mvc.RequestMapping} interface
+	 * @return The implementation of {@link cn.fh.lightning.mvc.requestmapping.RequestMapping} interface
 	 */
 	private RequestMapping findController(String url, RequestType reqType) {
 		for (RequestMapping rMap : this.reqMaps) {

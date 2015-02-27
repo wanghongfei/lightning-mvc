@@ -1,8 +1,8 @@
 package cn.fh.lightning.resource;
 
 import cn.fh.lightning.bean.Bean;
-import cn.fh.lightning.mvc.RequestType;
-import cn.fh.lightning.mvc.UrlRequestMapping;
+import cn.fh.lightning.mvc.requestmapping.RequestType;
+import cn.fh.lightning.mvc.requestmapping.UrlRequestMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;

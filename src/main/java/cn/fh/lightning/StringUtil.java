@@ -18,6 +18,7 @@ public class StringUtil {
     }
 
     /**
+     * @deprecated
      * "/WEB-INF/classes/cn/fh/StringUtil" -> "cn.fh.StringUtil"
      */
     public static String splitClassNameFromPath(String path) {
@@ -31,7 +32,7 @@ public class StringUtil {
 
     /**
      * "file:/home/whf/cn/fh" -> "/home/whf/cn/fh"
-     * "jar:file:/home/whf/foo.jar!cn/fh" -> "/home/whf/foo.jar"
+     * "url:jar:file:/home/whf/foo.jar!/cn/fh" -> "/home/whf/foo.jar"
      */
     public static String getRootPath(URL url) {
         String fileUrl = url.getFile();
