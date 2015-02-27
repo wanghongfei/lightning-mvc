@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="lightning-config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="map" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="url" type="xs:string" use="required"/>
+                        <xs:attribute name="controller" type="xs:string" use="required"/>
+                        <xs:attribute name="request-type" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
