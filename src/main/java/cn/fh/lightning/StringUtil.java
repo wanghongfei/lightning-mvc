@@ -8,6 +8,28 @@ public class StringUtil {
     }
 
     /**
+     * "/WEB-INF/classes/cn/fh/StringUtil.class" -> "StringUtil"
+     */
+    public static String trimClassNameFromPath(String path) {
+        int splashPos = path.lastIndexOf('/');
+        int dotPos = path.indexOf('.');
+
+        return path.substring(splashPos + 1, dotPos);
+    }
+
+    /**
+     * "/WEB-INF/classes/cn/fh/StringUtil" -> "cn.fh.StringUtil"
+     */
+    public static String splitClassNameFromPath(String path) {
+        int splashPos = path.lastIndexOf("/WEB-INF/classes/") + "/WEB-INF/classes/".length();
+        int pointPos = path.lastIndexOf('.');
+
+        String className = path.substring(splashPos, pointPos).replace('/', '.');
+
+        return className;
+    }
+
+    /**
      * "file:/home/whf/cn/fh" -> "/home/whf/cn/fh"
      * "jar:file:/home/whf/foo.jar!cn/fh" -> "/home/whf/foo.jar"
      */
