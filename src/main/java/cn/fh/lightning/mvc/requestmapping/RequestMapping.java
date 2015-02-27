@@ -1,4 +1,4 @@
-package cn.fh.lightning.mvc;
+package cn.fh.lightning.mvc.requestmapping;
 
 import cn.fh.lightning.bean.Bean;
 
