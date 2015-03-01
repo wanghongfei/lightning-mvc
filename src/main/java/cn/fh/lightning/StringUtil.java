@@ -18,6 +18,18 @@ public class StringUtil {
     }
 
     /**
+     * From "/WEB-INF/classes/cn/fh/StringUtil" to "cn.fh.StringUtil"
+     */
+    public static String splitClassNameFromPath(String path) {
+        int splashPos = path.lastIndexOf("/WEB-INF/classes/") + "/WEB-INF/classes/".length();
+        int pointPos = path.lastIndexOf('.');
+
+        String className = path.substring(splashPos, pointPos).replace('/', '.');
+
+        return className;
+    }
+
+    /**
      * From "file:/home/whf/cn/fh" to "/home/whf/cn/fh".
      * <p> From "url:jar:file:/home/whf/foo.jar!/cn/fh" to "/home/whf/foo.jar".
      */
