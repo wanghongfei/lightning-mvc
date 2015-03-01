@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ public abstract class BasicServlet extends HttpServlet {
 		logger.info("正在初始化[" + getClass().getName() + "]");
 
         // derived class will do initial job
-		initServlet(config.getServletContext());
+		initServlet(config);
 
 		logger.info("[" + getClass().getName() + "]初始化完成");
 	}
@@ -33,7 +32,7 @@ public abstract class BasicServlet extends HttpServlet {
     /**
      * Derived class should implement this method to do initialization job.
      */
-    protected abstract void initServlet(ServletContext ctx);
+    protected abstract void initServlet(ServletConfig cfg);
 
 	
 	@Override

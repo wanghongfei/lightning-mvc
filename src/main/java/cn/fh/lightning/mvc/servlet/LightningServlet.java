@@ -22,10 +22,7 @@ import cn.fh.lightning.resource.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,11 +40,12 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	
 	public static String DEFAULT_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-config.xml";
 	public static String DEFAULT_WEB_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-url-map.xml";
-	
+
+    public static String INIT_PARM_ENABLE_COMPONENT_SCAN = "ENABLE_COMPONENT_SCAN";
 
 	private RequestMapping[] reqMaps;
 
-    protected boolean ENABLE_COMPONENT_SCAN = true;
+    protected String ENABLE_COMPONENT_SCAN = "FALSE";
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -67,6 +65,10 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 			configFile = DEFAULT_CONFIGURE_FILE_LOCATION;
 		}
 
+
+        // load context parameters specified in web.xml
+        loadContextParameters(event.getServletContext());
+
         // parse configuration file
 		logger.info("正在解析bean配置文件");
 		Reader reader = new XmlReader(event.getServletContext(), configFile);
@@ -81,7 +83,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 
         // start to scan package to find out more component
         PackageScanner scanner = null;
-        if (ENABLE_COMPONENT_SCAN) {
+        if (Boolean.valueOf(ENABLE_COMPONENT_SCAN)) {
             logger.info("已经开启组件自动扫描(ENABLE_COMPONENT_SCAN = true)");
             try {
                 scanner = startPackageScan(event.getServletContext(), "cn.fh.sample");
@@ -92,24 +94,29 @@ public class LightningServlet extends BasicServlet implements ServletContextList
         }
 
 
-		
-		// 载入web页面role配置
-        // ...
-        // ...
-
+		// load security configurations
+        loadSecurityConfigurations(event.getServletContext());
 
 
         // Package scan should be finished now.
         // If not, keep looping until it finishes.
-        try {
-            while (!registerComponents(event.getServletContext(), scanner));
-        } catch (IOException e) {
-            logger.error("扫描组件失败");
-            e.printStackTrace();
+        if (Boolean.valueOf(ENABLE_COMPONENT_SCAN)) {
+            try {
+                while (!registerComponents(event.getServletContext(), scanner));
+            } catch (IOException e) {
+                logger.error("扫描组件失败");
+                e.printStackTrace();
+            }
         }
 
         logger.info("Lightning-mvc初始化完成");
 
+    }
+
+    private void loadSecurityConfigurations(ServletContext ctx) {
+        Reader reader = new WebXmlReader(ctx, DEFAULT_WEB_CONFIGURE_FILE_LOCATION);
+        this.reqMaps = reader.loadBeans().toArray(new UrlRequestMapping[1]);
+        logger.info("加载url映射完毕");
     }
 
     private PackageScanner startPackageScan(ServletContext ctx, String packageName) throws IOException {
@@ -219,12 +226,23 @@ public class LightningServlet extends BasicServlet implements ServletContextList
      * This method will be invoked when this servlet is created.
 	 */
 	@Override
-	protected void initServlet(ServletContext ctx) {
+	protected void initServlet(ServletConfig cfg) {
         // load request mapping configuration from configuration file
-		initRequestMapping(ctx);
-		logger.info("加载url映射完毕");
+		//initRequestMapping(cfg.getServletContext());
+		//logger.info("加载url映射完毕");
 	}
-	
+
+    private void loadContextParameters(ServletContext ctx) {
+        String compScan = ctx.getInitParameter(LightningServlet.INIT_PARM_ENABLE_COMPONENT_SCAN);
+        System.out.println(compScan);
+        if (null != compScan) {
+            this.ENABLE_COMPONENT_SCAN = compScan;
+        }
+    }
+
+    /**
+     * @deprecated
+     */
 	private void initRequestMapping(ServletContext ctx) {
 		Reader reader = new WebXmlReader(ctx, DEFAULT_WEB_CONFIGURE_FILE_LOCATION);
 		this.reqMaps = reader.loadBeans().toArray(new UrlRequestMapping[1]);
