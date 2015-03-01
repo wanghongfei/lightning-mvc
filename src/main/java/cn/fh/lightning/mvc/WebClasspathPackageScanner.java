@@ -31,7 +31,7 @@ public class WebClasspathPackageScanner implements PackageScanner, Bean {
     // *** methods required by PackageScanner interface *** //
 
     @Override
-    public List<String> getFullyQualifiedClassNameList() throws IOException {
+    public List<String> getCanonicalNameList() throws IOException {
         return doScan(basePackage, new ArrayList<>());
     }
 

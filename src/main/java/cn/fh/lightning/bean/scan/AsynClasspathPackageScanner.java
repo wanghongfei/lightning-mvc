@@ -51,7 +51,7 @@ public class AsynClasspathPackageScanner extends WebClasspathPackageScanner impl
      * @throws IOException If something wrong with the procedure of scanning happens.
      */
     @Override
-    public List<String> getFullyQualifiedClassNameList() throws IOException {
+    public List<String> getCanonicalNameList() throws IOException {
         List<String> result = null;
 
         // inquire of whether task has been finished

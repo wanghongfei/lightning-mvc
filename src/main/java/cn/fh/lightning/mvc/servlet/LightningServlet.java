@@ -134,7 +134,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
     }
 
 	private boolean registerComponents(ServletContext ctx, PackageScanner scanner) throws IOException {
-        List<String> nameList = scanner.getFullyQualifiedClassNameList();
+        List<String> nameList = scanner.getCanonicalNameList();
 
         // scanning has not finished yet
         if (null == nameList || nameList.isEmpty()) {

@@ -14,5 +14,5 @@ public interface PackageScanner {
      * @return
      * @throws IOException
      */
-    List<String> getFullyQualifiedClassNameList() throws IOException;
+    List<String> getCanonicalNameList() throws IOException;
 }

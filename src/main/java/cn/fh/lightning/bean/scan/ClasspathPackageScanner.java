@@ -52,7 +52,7 @@ public class ClasspathPackageScanner implements PackageScanner {
      * @throws IOException
      */
     @Override
-    public List<String> getFullyQualifiedClassNameList() throws IOException {
+    public List<String> getCanonicalNameList() throws IOException {
         logger.info("开始扫描包{}下的所有类", basePackage);
 
         return doScan(basePackage, new ArrayList<>());
@@ -178,7 +178,7 @@ public class ClasspathPackageScanner implements PackageScanner {
      */
     public static void main(String[] args) throws Exception {
         PackageScanner scan = new ClasspathPackageScanner("cn.fh.lightning.bean");
-        scan.getFullyQualifiedClassNameList();
+        scan.getCanonicalNameList();
     }
 
 }
