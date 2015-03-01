@@ -19,8 +19,8 @@ import java.util.Set;
 public class WebClasspathPackageScanner implements PackageScanner, Bean {
     private Logger logger = LoggerFactory.getLogger(WebClasspathPackageScanner.class);
 
-    private ServletContext ctx;
-    private String basePackage;
+    protected ServletContext ctx;
+    protected String basePackage;
 
     public WebClasspathPackageScanner(String basePackage, ServletContext ctx) {
         this.basePackage = basePackage;
@@ -34,7 +34,7 @@ public class WebClasspathPackageScanner implements PackageScanner, Bean {
         return doScan(basePackage, new ArrayList<>());
     }
 
-    private List<String> doScan(String basePackage, List<String> nameList) {
+    protected List<String> doScan(String basePackage, List<String> nameList) {
         Set<String> nameSet = ctx.getResourcePaths("/WEB-INF/classes/" + StringUtil.dotToSplash(basePackage));
 
         if (null == nameSet || nameSet.isEmpty()) {

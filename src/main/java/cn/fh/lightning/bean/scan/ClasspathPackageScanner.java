@@ -21,8 +21,8 @@ import java.util.jar.JarInputStream;
 public class ClasspathPackageScanner implements PackageScanner {
     private Logger logger = LoggerFactory.getLogger(ClasspathPackageScanner.class);
 
-    private String basePackage;
-    private ClassLoader cl;
+    protected String basePackage;
+    protected ClassLoader cl;
 
     /**
      * Construct an instance and specify the base package it should scan.
@@ -67,7 +67,7 @@ public class ClasspathPackageScanner implements PackageScanner {
      *
      * @throws IOException
      */
-    private List<String> doScan(String basePackage, List<String> nameList) throws IOException {
+    protected List<String> doScan(String basePackage, List<String> nameList) throws IOException {
         // replace dots with splashes
         String splashPath = StringUtil.dotToSplash(basePackage);
 
