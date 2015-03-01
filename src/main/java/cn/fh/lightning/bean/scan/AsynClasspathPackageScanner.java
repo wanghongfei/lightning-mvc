@@ -29,6 +29,8 @@ public class AsynClasspathPackageScanner extends WebClasspathPackageScanner impl
      */
     public AsynClasspathPackageScanner(String basePackage, ServletContext ctx) {
         super(basePackage, ctx);
+
+        scanFuture = scanInNewThread();
     }
 
     /**
@@ -50,8 +52,6 @@ public class AsynClasspathPackageScanner extends WebClasspathPackageScanner impl
      */
     @Override
     public List<String> getFullyQualifiedClassNameList() throws IOException {
-        logger.info("开始扫描组件");
-
         List<String> result = null;
 
         // inquire of whether task has been finished

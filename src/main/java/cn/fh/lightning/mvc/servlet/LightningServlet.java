@@ -3,10 +3,14 @@ package cn.fh.lightning.mvc.servlet;
 import cn.fh.lightning.StringUtil;
 import cn.fh.lightning.bean.container.BasicInjectableBeanContainer;
 import cn.fh.lightning.bean.container.InjectableBeanContainer;
+import cn.fh.lightning.bean.scan.AsynClasspathPackageScanner;
 import cn.fh.lightning.bean.scan.DefaultAnnotationProcessor;
 import cn.fh.lightning.bean.scan.PackageScanner;
 import cn.fh.lightning.exception.BeanNotFoundException;
-import cn.fh.lightning.mvc.*;
+import cn.fh.lightning.mvc.BasicModel;
+import cn.fh.lightning.mvc.Constants;
+import cn.fh.lightning.mvc.Controller;
+import cn.fh.lightning.mvc.InternalModel;
 import cn.fh.lightning.mvc.exception.InvalidControllerException;
 import cn.fh.lightning.mvc.exception.ViewNotFoundException;
 import cn.fh.lightning.mvc.requestmapping.RequestMapping;
@@ -42,7 +46,8 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	
 
 	private RequestMapping[] reqMaps;
-	
+
+    protected boolean ENABLE_COMPONENT_SCAN = true;
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -72,29 +77,51 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 		ioc.registerBeans(reader.loadBeans());
         // put IoC container into servlet context
 		event.getServletContext().setAttribute(BEAN_CONTAINER_ATTRIBUTE, ioc);
+        logger.info("容器启动完毕");
 
-        // scan package to find out more component
+        // start to scan package to find out more component
+        PackageScanner scanner = null;
+        if (ENABLE_COMPONENT_SCAN) {
+            logger.info("已经开启组件自动扫描(ENABLE_COMPONENT_SCAN = true)");
+            try {
+                scanner = startPackageScan(event.getServletContext(), "cn.fh.sample");
+            } catch (IOException e) {
+                logger.error("扫描组件失败");
+                e.printStackTrace();
+            }
+        }
+
+
+		
+		// 载入web页面role配置
+        // ...
+        // ...
+
+
+
+        // Package scan should be finished now.
+        // If not, keep looping until it finishes.
         try {
-            doPackageScan(event.getServletContext(), "cn.fh.sample");
+            while (!registerComponents(event.getServletContext(), scanner));
         } catch (IOException e) {
             logger.error("扫描组件失败");
             e.printStackTrace();
         }
 
-        logger.info("容器启动完毕");
-		
-		
-		// 载入web页面role配置
-	}
+        logger.info("Lightning-mvc初始化完成");
 
-	private void doPackageScan(ServletContext ctx, String packageName) throws IOException {
-        PackageScanner scan = new WebClasspathPackageScanner(packageName, ctx);
-        List<String> nameList = scan.getFullyQualifiedClassNameList();
+    }
 
-        if (null == nameList) {
-            logger.info("未发现注解组件");
+    private PackageScanner startPackageScan(ServletContext ctx, String packageName) throws IOException {
+        return new AsynClasspathPackageScanner(packageName, ctx);
+    }
 
-            return;
+	private boolean registerComponents(ServletContext ctx, PackageScanner scanner) throws IOException {
+        List<String> nameList = scanner.getFullyQualifiedClassNameList();
+
+        // scanning has not finished yet
+        if (null == nameList || nameList.isEmpty()) {
+            return false;
         }
 
         for (String className : nameList) {
@@ -105,6 +132,8 @@ public class LightningServlet extends BasicServlet implements ServletContextList
                 e.printStackTrace();
             }
         }
+
+        return true;
 	}
 
 

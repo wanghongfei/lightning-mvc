@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * This class should be used in web environment only.
  * Created by whf on 15-2-27.
  */
 public class WebClasspathPackageScanner implements PackageScanner, Bean {
