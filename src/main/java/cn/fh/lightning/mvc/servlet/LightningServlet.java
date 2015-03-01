@@ -42,10 +42,12 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	public static String DEFAULT_WEB_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-url-map.xml";
 
     public static String INIT_PARM_ENABLE_COMPONENT_SCAN = "ENABLE_COMPONENT_SCAN";
+    public static String INIT_PARM_SCAN_PACKAGE = "SCAN_PACKAGE";
 
 	private RequestMapping[] reqMaps;
 
     protected String ENABLE_COMPONENT_SCAN = "FALSE";
+    protected String SCAN_BASE_PACKAGE = "cn.fh.sample";
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -84,9 +86,9 @@ public class LightningServlet extends BasicServlet implements ServletContextList
         // start to scan package to find out more component
         PackageScanner scanner = null;
         if (Boolean.valueOf(ENABLE_COMPONENT_SCAN)) {
-            logger.info("已经开启组件自动扫描(ENABLE_COMPONENT_SCAN = true)");
+            logger.info("已开启组件自动扫描(ENABLE_COMPONENT_SCAN = true)");
             try {
-                scanner = startPackageScan(event.getServletContext(), "cn.fh.sample");
+                scanner = startPackageScan(event.getServletContext(), SCAN_BASE_PACKAGE);
             } catch (IOException e) {
                 logger.error("扫描组件失败");
                 e.printStackTrace();
@@ -234,9 +236,13 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 
     private void loadContextParameters(ServletContext ctx) {
         String compScan = ctx.getInitParameter(LightningServlet.INIT_PARM_ENABLE_COMPONENT_SCAN);
-        System.out.println(compScan);
         if (null != compScan) {
             this.ENABLE_COMPONENT_SCAN = compScan;
+        }
+
+        String basePackage = ctx.getInitParameter(LightningServlet.INIT_PARM_SCAN_PACKAGE);
+        if (basePackage != null) {
+            this.SCAN_BASE_PACKAGE = basePackage;
         }
     }
 
