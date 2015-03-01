@@ -20,7 +20,6 @@ public class CredentialUtils {
 	 * <p> 如果当前session中存在一个Credential，则扔RuntimeException
 	 * @param session 当前session
 	 * @param credential
-	 * @return
 	 */
 	public static void createCredential(HttpSession session, Credential credential) {
 		if (null != session.getAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE)) {

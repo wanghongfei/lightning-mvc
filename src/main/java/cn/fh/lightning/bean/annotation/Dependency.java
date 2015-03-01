@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by whf on 15-2-27.
+ * Annotation for fields to indicate this field should be injected by
+ * the IoC container.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

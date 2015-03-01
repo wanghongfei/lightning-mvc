@@ -32,7 +32,7 @@ public class WebXmlReader extends XmlReader {
 	}
 
 	/**
-     * Analyze <code><url-map></code> tag.
+     * Analyze {@code <url-map>} tag.
 	 */
 	@Override
 	protected void parseBeanTag(Element beanTag, Resource r, List<Bean> beanList) {

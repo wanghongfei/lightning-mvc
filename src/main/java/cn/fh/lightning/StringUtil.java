@@ -8,7 +8,7 @@ public class StringUtil {
     }
 
     /**
-     * "/WEB-INF/classes/cn/fh/StringUtil.class" -> "StringUtil"
+     * From "/WEB-INF/classes/cn/fh/StringUtils.class" to "StringUtil"
      */
     public static String trimClassNameFromPath(String path) {
         int splashPos = path.lastIndexOf('/');
@@ -18,21 +18,8 @@ public class StringUtil {
     }
 
     /**
-     * @deprecated
-     * "/WEB-INF/classes/cn/fh/StringUtil" -> "cn.fh.StringUtil"
-     */
-    public static String splitClassNameFromPath(String path) {
-        int splashPos = path.lastIndexOf("/WEB-INF/classes/") + "/WEB-INF/classes/".length();
-        int pointPos = path.lastIndexOf('.');
-
-        String className = path.substring(splashPos, pointPos).replace('/', '.');
-
-        return className;
-    }
-
-    /**
-     * "file:/home/whf/cn/fh" -> "/home/whf/cn/fh"
-     * "url:jar:file:/home/whf/foo.jar!/cn/fh" -> "/home/whf/foo.jar"
+     * From "file:/home/whf/cn/fh" to "/home/whf/cn/fh".
+     * <p> From "url:jar:file:/home/whf/foo.jar!/cn/fh" to "/home/whf/foo.jar".
      */
     public static String getRootPath(URL url) {
         String fileUrl = url.getFile();
@@ -46,16 +33,15 @@ public class StringUtil {
     }
 
     /**
-     * "cn.fh.lightning" -> "cn/fh/lightning"
-     * @param name
-     * @return
+     * From "cn.fh.lightning" to "cn/fh/lightning"
+     * @param name The package name to be transformed.
      */
     public static String dotToSplash(String name) {
         return name.replaceAll("\\.", "/");
     }
 
     /**
-     * "Apple.class" -> "Apple"
+     * From "Apple.class" to "Apple"
      */
     public static String trimExtension(String name) {
         int pos = name.indexOf('.');
@@ -67,9 +53,7 @@ public class StringUtil {
     }
 
 	/**
-	 * /application/home -> /home
-	 * @param uri
-	 * @return
+	 * From "/application/home" to "/home".
 	 */
 	public static String trimURI(String uri) {
 		String trimmed = uri.substring(1);

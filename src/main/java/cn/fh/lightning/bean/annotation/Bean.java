@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by whf on 15-2-26.
+ * A notion for classes indicates that this class should be
+ * managed by IoC container.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

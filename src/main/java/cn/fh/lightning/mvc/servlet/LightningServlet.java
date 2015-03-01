@@ -41,6 +41,7 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	public static String DEFAULT_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-config.xml";
 	public static String DEFAULT_WEB_CONFIGURE_FILE_LOCATION = "/WEB-INF/lightning-url-map.xml";
 
+    // These are the context parameters specified in web.xml
     public static String INIT_PARM_ENABLE_COMPONENT_SCAN = "ENABLE_COMPONENT_SCAN";
     public static String INIT_PARM_SCAN_PACKAGE = "SCAN_PACKAGE";
 
@@ -56,7 +57,14 @@ public class LightningServlet extends BasicServlet implements ServletContextList
 	}
 
 	/**
-     * Create IoC container.
+     * Invoked when the application is deployed to the web server.
+     * This method is responsible to do the following tasks:
+     * <p><ol>
+     *     <li>Load web security configurations</li>
+     *     <li>Initialize IoC container</li>
+     *     <li>Find components from configuration files or classpath</li>
+     *     </ol>
+     *
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent event) {

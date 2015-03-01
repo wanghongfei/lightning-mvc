@@ -1,16 +1,8 @@
 package cn.fh.lightning.resource;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import cn.fh.lightning.bean.Bean;
+import cn.fh.lightning.bean.BeanUtil;
+import cn.fh.lightning.exception.InvalidBeanXmlConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -19,9 +11,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import cn.fh.lightning.bean.Bean;
-import cn.fh.lightning.bean.BeanUtil;
-import cn.fh.lightning.exception.InvalidBeanXmlConfigurationException;
+import javax.servlet.ServletContext;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.*;
 
 public class XmlReader extends AbstractReader {
 	public static Logger logger = LoggerFactory.getLogger(XmlReader.class);
@@ -111,10 +105,7 @@ public class XmlReader extends AbstractReader {
 	}
 	
 	/**
-	 * 解析一个<bean>标签
-	 * @param beanTag
-	 * @param r
-	 * @param beanList
+	 * Parse a single {@code <bean>} tag.
 	 */
 	protected void parseBeanTag(Element beanTag, Resource r, List<Bean> beanList) {
 		// 解析bean的id和类名
@@ -158,10 +149,7 @@ public class XmlReader extends AbstractReader {
 	}
 	
 	/**
-	 * 解析一个<prop>标签
-	 * @param depTag
-	 * @param r
-	 * @param depMap
+     * Parse a single {@code <prop>} tag.
 	 */
 	private void parseBeanDepTag(Element depTag, Resource r, Map<String, String> depMap) {
 		if (false == depTag.getTagName().equals("prop")) {

@@ -10,22 +10,25 @@ public abstract class AbstractBean implements Bean {
 	/**
 	 * A map containing the properties(dependencies) for this bean.
 	 * The key of this map is field name and the value of this map is the qualified name of a {@link Class}.
-	 * e.g.. key: username, value: java.lang.String
+	 * <p>e.g.. key: username, value: java.lang.String
 	 */
 	protected Map<String, String> dependencyMap = new HashMap<String, String>();
 
 	/**
-	 * The actual bean component object.
+     * Object that this bean wraps.
 	 */
 	protected Object actualBean;
 
+    /**
+     * The unique identification name of this bean.
+     */
 	protected String beanName;
 	
 	/**
-	 * Construct a bean component with name.
+	 * Construct a bean with name.
 	 *
-	 * @param beanName
-	 * @param obj
+	 * @param beanName The unique identification name of this bean.
+	 * @param obj The actual object this bean wraps.
 	 */
 	public AbstractBean(String beanName, Object obj) {
 		this.beanName = beanName;
@@ -35,9 +38,9 @@ public abstract class AbstractBean implements Bean {
 	/**
 	 * Construct bean component with name and properties.
 	 *
-	 * @param beanName
-	 * @param obj
-	 * @param propMap A map containing the properties.
+     * @param beanName The unique identification name of this bean.
+     * @param obj The actual object this bean wraps.
+	 * @param propMap A map containing the dependency information.
 	 */
 	public AbstractBean(String beanName, Object obj, Map<String, String> propMap) {
 		this(beanName, obj);
@@ -76,8 +79,7 @@ public abstract class AbstractBean implements Bean {
 
 	/**
 	 * Use bean name to determine 2 beans are equal or not.
-	 * @param obj
-	 * @return
+	 * @param obj The object to be compared with.
 	 */
 	@Override
 	public boolean equals(Object obj) {
