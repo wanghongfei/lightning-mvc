@@ -18,12 +18,12 @@ public class WebXmlReader extends XmlReader {
 	public static Logger logger = LoggerFactory.getLogger(WebXmlReader.class);
 
 	public WebXmlReader(ServletContext ctx, String... xmlPaths) {
-		this.resources = new Resource[xmlPaths.length];
-		
+        super(ctx, xmlPaths);
+/*		this.resources = new Resource[xmlPaths.length];
 		int ix = 0;
 		for (String path : xmlPaths) {
 			this.resources[ix++] = new ClassPathXmlResource(path, ctx);
-		}
+		}*/
 		
 	}
 	
