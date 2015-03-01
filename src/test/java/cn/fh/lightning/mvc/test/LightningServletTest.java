@@ -1,26 +1,11 @@
 package cn.fh.lightning.mvc.test;
 
-import cn.fh.lightning.bean.container.InjectableBeanContainer;
-import cn.fh.lightning.bean.test.HomeController;
-import cn.fh.lightning.mvc.servlet.LightningServlet;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 /**
  * Created by whf on 15-2-26.
  */
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class LightningServletTest {
-    @Mock
+    /*@Mock
     private ServletContextEvent mockEvent;
     @Mock
     private ServletContext mockContext;
@@ -57,11 +42,11 @@ public class LightningServletTest {
         servlet.contextInitialized(mockEvent);
     }
 
-    /**
+    *//**
      * Feed servlet with the URL "/application/home".
      * If something wrong happens, this method will throw
      * {@link java.lang.NullPointerException}.
-     */
+     *//*
     @Test
     public void testProcessValidRequest() throws ServletException, IOException {
         Mockito.when(req.getMethod())
@@ -91,5 +76,5 @@ public class LightningServletTest {
 
         // process request
         servlet.service(req, resp);
-    }
+    }*/
 }
