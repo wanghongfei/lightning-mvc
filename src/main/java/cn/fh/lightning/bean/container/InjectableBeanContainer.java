@@ -6,8 +6,8 @@ package cn.fh.lightning.bean.container;
 public interface InjectableBeanContainer extends BeanContainer {
 	/**
 	 * Retrieve bean from container with all its dependencies injected.
-	 * @param beanName
-	 * @return
+	 * @param beanName The name of the desired bean.
+	 * @return The component with all its dependencies injected.
 	 */
 	public Object getBeanWithDependencies(String beanName);
 }

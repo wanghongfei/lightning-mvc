@@ -8,5 +8,10 @@ import java.io.InputStream;
  * can be recognized as a kind of resource.
  */
 public interface Resource {
+    /**
+     * Open a stream for this resource.
+     * @return The {@code InputStream} instance for this resource.
+     * @throws IOException If an I/O error occurs.
+     */
 	public InputStream getInputStream() throws IOException;
 }

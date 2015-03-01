@@ -11,17 +11,23 @@ public interface BeanContainer {
 	public String CONTAINER_ATTIBUTE = "BEAN_CONTAINER_ATTRIBUTE";
 
 	/**
-	 * Retrieve bean from container.
-	 * @param name
-	 * @return
+	 * Retrieve the object the bean wraps from container.
+	 * @param name The name of the desired bean.
+	 * @return Object that the bean wraps.
 	 */
 	public Object getBean(String name);
 	
 	/**
 	 * Add a new bean to container.
-	 * @param bean
+	 * @param bean Bean to be registered to this container.
 	 */
 	public void registerBean(Bean bean);
-	
+
+    /**
+     * Add multiple beans to container.
+     * @param beanList A {@code List} of @{code Bean}
+     *
+     * @see #registerBean
+     */
 	public void registerBeans(List<Bean> beanList);
 }

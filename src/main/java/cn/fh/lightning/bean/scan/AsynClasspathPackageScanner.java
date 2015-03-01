@@ -11,12 +11,9 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- *
  * This class is the asynchronized version of {@link cn.fh.lightning.mvc.WebClasspathPackageScanner},
  * which means the scanning task will be done in a separate thread.
  * <p> This class should be used in web environment only.
- *
- * Created by whf on 15-3-1.
  */
 public class AsynClasspathPackageScanner extends WebClasspathPackageScanner implements Callable<List<String>> {
     private Logger logger = LoggerFactory.getLogger(AsynClasspathPackageScanner.class);

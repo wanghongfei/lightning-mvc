@@ -13,7 +13,7 @@ import java.util.Map;
  * Analyze all annotations in target class and register that class
  * to container.
  *
- * Created by whf on 15-2-27.
+ * @author whf
  */
 public class DefaultAnnotationProcessor {
     private Class clazz;

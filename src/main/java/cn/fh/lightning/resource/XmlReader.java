@@ -27,8 +27,14 @@ public class XmlReader extends AbstractReader {
 	
 	
 	/**
-	 * 构造一个XmlReader对象，并指定配置文件的路径
-	 * @param xmlPaths
+     * Construct an instance with the path of the configurations.
+     *
+     * @param ctx If this class is used in web environment, you should pass
+     *            an instance of {@link javax.servlet.ServletContext}. Otherwise
+     *            you should set it to {@code null}.
+	 * @param xmlPaths The path of configuration files. If {@code ctx} is not set
+     *                 to null, path should be a classpath. Otherwise it should be
+     *                 a file system path.
 	 */
 	public XmlReader(ServletContext ctx, String... xmlPaths) {
 		this.resources = new Resource[xmlPaths.length];

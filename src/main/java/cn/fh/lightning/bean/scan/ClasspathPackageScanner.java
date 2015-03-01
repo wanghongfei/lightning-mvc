@@ -16,7 +16,6 @@ import java.util.jar.JarInputStream;
 
 /**
  * This scanner is used to find out all classes in a package.
- * Created by whf on 15-2-26.
  */
 public class ClasspathPackageScanner implements PackageScanner {
     private Logger logger = LoggerFactory.getLogger(ClasspathPackageScanner.class);
@@ -61,11 +60,11 @@ public class ClasspathPackageScanner implements PackageScanner {
     /**
      * Actually perform the scanning procedure.
      *
-     * @param basePackage
+     * @param basePackage The package name to be scanned.
      * @param nameList A list to contain the result.
      * @return A list of fully qualified names.
      *
-     * @throws IOException
+     * @throws IOException If an I/O error occurs.
      */
     protected List<String> doScan(String basePackage, List<String> nameList) throws IOException {
         // replace dots with splashes
