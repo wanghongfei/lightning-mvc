@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * Created by whf on 15-2-27.
  */
-public class DefaultAnnotationProcessor implements Runnable {
+public class DefaultAnnotationProcessor {
     private Class clazz;
     private BeanContainer container;
 
@@ -26,19 +26,11 @@ public class DefaultAnnotationProcessor implements Runnable {
      *
      * @param clazz The Class object of the class you want to analyze annotations for.
      * @param container The IoC container.
-     * @param newThread If you are going to use this class in a separate thread, you must set this flag to true.
      */
-    public DefaultAnnotationProcessor(Class clazz, BeanContainer container, boolean newThread) {
+    public DefaultAnnotationProcessor(Class clazz, BeanContainer container) {
         this.clazz = clazz;
         this.container = container;
 
-        if (newThread) {
-            doProcess();
-        }
-    }
-
-    @Override
-    public void run() {
         doProcess();
     }
 
