@@ -7,6 +7,10 @@ lightning-mvc
 * 超轻量级，不足1MB
 * 支持IoC, 依赖注入，通过注解定义组件、依赖
 
+#### 后续开发计划
+- 内置HTTP服务器, 使得框架能够脱离Web容器独立运行
+- 完善IoC容器
+
 #### 使用方法
 * 将`lightning-mvc.jar`添加到classpath中
 * 在`web.xml`中声明servlet:
